@@ -1,0 +1,2365 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>EduBridge AI — Learn Smarter. Grow Faster.</title>
+  
+  <!-- Google Fonts: Inter -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  
+  <!-- Lucide Icons CDN -->
+  <script src="https://unpkg.com/lucide@latest"></script>
+
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            brand: {
+              DEFAULT: '#6D5AE6',
+              dark: '#5844D1',
+              light: '#F0EDFF',
+              subtle: '#FAF9FF'
+            },
+            surface: {
+              page: '#F8F9FC',
+              card: '#FFFFFF',
+              muted: '#F1F3F9'
+            },
+            ink: {
+              main: '#20212A',
+              secondary: '#77798A',
+              light: '#A3A6BA'
+            },
+            mint: {
+              DEFAULT: '#31B889',
+              light: '#EAF8F3'
+            },
+            amber: {
+              warm: '#FFB45E',
+              light: '#FFF6EC'
+            },
+            border: {
+              subtle: '#E9EAF1',
+              focus: '#6D5AE6'
+            }
+          },
+          fontFamily: {
+            sans: ['"Plus Jakarta Sans"', 'Inter', 'sans-serif'],
+            body: ['Inter', 'sans-serif']
+          },
+          boxShadow: {
+            'card-sm': '0 1px 3px rgba(32, 33, 42, 0.04), 0 1px 2px rgba(32, 33, 42, 0.03)',
+            'card-md': '0 4px 12px rgba(109, 90, 230, 0.06), 0 1px 3px rgba(32, 33, 42, 0.05)',
+            'card-lg': '0 10px 25px -4px rgba(109, 90, 230, 0.08), 0 4px 8px -2px rgba(32, 33, 42, 0.03)',
+            'purple-glow': '0 4px 20px rgba(109, 90, 230, 0.22)'
+          }
+        }
+      }
+    }
+  </script>
+
+  <style>
+    /* Strict Light Mode & Micro-Interactions */
+    body {
+      background-color: #F8F9FC;
+      color: #20212A;
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      -webkit-font-smoothing: antialiased;
+      overflow-x: hidden;
+    }
+
+    /* Custom Scrollbars */
+    ::-webkit-scrollbar {
+      width: 6px;
+      height: 6px;
+    }
+    ::-webkit-scrollbar-track {
+      background: #F8F9FC;
+    }
+    ::-webkit-scrollbar-thumb {
+      background: #E0E2ED;
+      border-radius: 9999px;
+    }
+    ::-webkit-scrollbar-thumb:hover {
+      background: #C4C7DA;
+    }
+
+    /* 3D Flip Card Styles */
+    .perspective-1000 {
+      perspective: 1000px;
+    }
+    .transform-style-3d {
+      transform-style: preserve-3d;
+    }
+    .backface-hidden {
+      backface-visibility: hidden;
+    }
+    .rotate-y-180 {
+      transform: rotateY(180deg);
+    }
+
+    /* Smooth Active Transition */
+    .nav-item-active {
+      background-color: #F0EDFF !important;
+      color: #6D5AE6 !important;
+      font-weight: 600;
+    }
+    .nav-item-active svg {
+      color: #6D5AE6 !important;
+    }
+
+    /* Subtle pulsing badge */
+    @keyframes pulse-subtle {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0.6; }
+    }
+    .animate-pulse-subtle {
+      animation: pulse-subtle 2.5s infinite ease-in-out;
+    }
+  </style>
+</head>
+
+<body class="bg-[#F8F9FC] text-ink-main antialiased min-h-screen flex flex-col">
+
+  <header class="sticky top-0 z-40 bg-white/95 backdrop-blur-md border-b border-border-subtle h-16 flex items-center px-4 lg:px-6 justify-between transition-shadow">
+    <!-- Left: Hamburger (Mobile) & Brand Identity -->
+    <div class="flex items-center gap-3">
+      <button id="mobileMenuBtn" class="lg:hidden p-2 rounded-lg text-ink-secondary hover:text-brand hover:bg-brand-light transition" aria-label="Open sidebar">
+        <i data-lucide="menu" class="w-5 h-5"></i>
+      </button>
+
+      <!-- Logo & Wordmark -->
+      <div class="flex items-center gap-2.5 cursor-pointer" onclick="switchScreen('dashboard')">
+        <div class="w-9 h-9 rounded-xl bg-brand flex items-center justify-center text-white shadow-purple-glow">
+          <i data-lucide="sparkles" class="w-5 h-5"></i>
+        </div>
+        <div>
+          <span class="text-lg font-bold tracking-tight text-ink-main flex items-center gap-1">
+            EduBridge <span class="text-brand">AI</span>
+          </span>
+          <p class="hidden sm:block text-[10px] font-medium tracking-wide uppercase text-ink-secondary -mt-1">
+            Learn Smarter. Grow Faster.
+          </p>
+        </div>
+      </div>
+
+      <!-- Presentation Badge -->
+      <span class="hidden md:inline-flex items-center gap-1.5 px-2.5 py-1 ml-3 rounded-full text-[11px] font-semibold bg-emerald-50 text-mint border border-emerald-200">
+        <span class="w-1.5 h-1.5 rounded-full bg-mint animate-pulse"></span>
+        Google for Education Demo
+      </span>
+    </div>
+
+    <!-- Center: Global Search Bar -->
+    <div class="hidden md:flex items-center flex-1 max-w-md mx-6">
+      <div class="relative w-full">
+        <i data-lucide="search" class="w-4 h-4 absolute left-3.5 top-1/2 -translate-y-1/2 text-ink-light"></i>
+        <input 
+          type="text" 
+          placeholder="Search subjects, business frameworks, formulas, notes..." 
+          class="w-full pl-10 pr-4 py-2 text-sm bg-surface-page border border-border-subtle rounded-xl text-ink-main placeholder-ink-light focus:outline-none focus:border-brand focus:bg-white transition"
+        />
+        <kbd class="hidden lg:inline-flex absolute right-3 top-1/2 -translate-y-1/2 px-1.5 py-0.5 text-[10px] font-medium text-ink-light bg-white border border-border-subtle rounded shadow-sm">⌘K</kbd>
+      </div>
+    </div>
+
+    <!-- Right: Stats, Notifications, Student Profile & Public View Switcher -->
+    <div class="flex items-center gap-3">
+      <!-- Public Landing Page Toggle Button -->
+      <button onclick="switchScreen('landing')" class="text-xs font-semibold px-3 py-1.5 rounded-lg border border-border-subtle hover:border-brand text-ink-secondary hover:text-brand bg-white transition flex items-center gap-1.5">
+        <i data-lucide="globe" class="w-3.5 h-3.5"></i>
+        <span class="hidden sm:inline">Landing Page</span>
+      </button>
+
+      <!-- Streak Counter -->
+      <div class="flex items-center gap-1.5 px-3 py-1 rounded-full bg-amber-light border border-amber-warm/30 text-ink-main text-xs font-bold" title="14-Day Continuous Study Streak!">
+        <span class="text-sm">🔥</span>
+        <span>14 <span class="hidden sm:inline font-normal text-ink-secondary">Days</span></span>
+      </div>
+
+      <!-- Notification Bell with Popover Simulation -->
+      <div class="relative">
+        <button id="notifBtn" class="p-2 rounded-xl text-ink-secondary hover:text-brand hover:bg-brand-light relative transition">
+          <i data-lucide="bell" class="w-5 h-5"></i>
+          <span class="absolute top-1.5 right-1.5 w-2 h-2 bg-brand rounded-full ring-2 ring-white"></span>
+        </button>
+        <!-- Mini Dropdown -->
+        <div id="notifDropdown" class="hidden absolute right-0 mt-2 w-72 bg-white rounded-2xl shadow-card-lg border border-border-subtle p-3 text-xs z-50">
+          <div class="flex items-center justify-between font-bold text-ink-main pb-2 border-b border-border-subtle">
+            <span>Notifications</span>
+            <span class="text-[11px] text-brand cursor-pointer">Mark all read</span>
+          </div>
+          <div class="py-2 space-y-2">
+            <div class="p-2 rounded-lg bg-brand-light/60 text-ink-main">
+              <p class="font-semibold text-brand">Quiz Reminder</p>
+              <p class="text-[11px] text-ink-secondary">Review Harvard Business Strategy: Porter's 5 Forces due today at 8 PM.</p>
+            </div>
+            <div class="p-2 rounded-lg hover:bg-surface-page text-ink-main transition">
+              <p class="font-semibold">AI Tutor Insight</p>
+              <p class="text-[11px] text-ink-secondary">Your flashcard mastery in Financial Accounting increased by 18%.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- User Profile Avatar & Role -->
+      <div class="flex items-center gap-2.5 pl-2 border-l border-border-subtle cursor-pointer" onclick="switchScreen('settings')">
+        <div class="w-8 h-8 rounded-full bg-gradient-to-tr from-brand to-purple-400 text-white flex items-center justify-center font-bold text-xs ring-2 ring-brand-light">
+          AM
+        </div>
+        <div class="hidden xl:block text-left">
+          <p class="text-xs font-bold text-ink-main leading-tight">Rohon Das</p>
+          <p class="text-[10px] text-ink-secondary">BBA Student • Honors</p>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <div class="flex-1 flex overflow-hidden">
+    
+    <!-- DESKTOP SIDEBAR -->
+    <aside id="sidebar" class="hidden lg:flex flex-col w-64 bg-white border-r border-border-subtle flex-shrink-0 select-none overflow-y-auto">
+      <div class="p-4 space-y-6">
+        
+        <!-- Primary Learning Core Section -->
+        <div>
+          <p class="px-3 text-[10px] font-bold text-ink-light uppercase tracking-wider mb-2">Study Core</p>
+          <nav class="space-y-1 text-sm font-medium">
+            <button onclick="switchScreen('dashboard')" id="nav-dashboard" class="w-full flex items-center gap-3 px-3 py-2.5 rounded-xl text-ink-secondary hover:text-brand hover:bg-brand-light/60 transition nav-item-active">
+              <i data-lucide="layout-dashboard" class="w-4 h-4"></i>
+              <span>Dashboard</span>
+            </button>
+            <button onclick="switchScreen('ai-tutor')" id="nav-ai-tutor" class="w-full flex items-center gap-3 px-3 py-2.5 rounded-xl text-ink-secondary hover:text-brand hover:bg-brand-light/60 transition">
+              <i data-lucide="bot" class="w-4 h-4"></i>
+              <span class="flex-1 text-left">AI Tutor</span>
+              <span class="text-[10px] font-bold px-1.5 py-0.5 rounded-md bg-brand-light text-brand">Gemini</span>
+            </button>
+            <button onclick="switchScreen('concept-explainer')" id="nav-concept-explainer" class="w-full flex items-center gap-3 px-3 py-2.5 rounded-xl text-ink-secondary hover:text-brand hover:bg-brand-light/60 transition">
+              <i data-lucide="lightbulb" class="w-4 h-4"></i>
+              <span>Explain a Concept</span>
+            </button>
+            <button onclick="switchScreen('pdf-reader')" id="nav-pdf-reader" class="w-full flex items-center gap-3 px-3 py-2.5 rounded-xl text-ink-secondary hover:text-brand hover:bg-brand-light/60 transition">
+              <i data-lucide="file-text" class="w-4 h-4"></i>
+              <span class="flex-1 text-left">PDF Reader & Upload</span>
+              <span class="text-[10px] font-bold px-1.5 py-0.5 rounded-md bg-amber-light text-amber-warm">New</span>
+            </button>
+            <button onclick="switchScreen('summary-notes')" id="nav-summary-notes" class="w-full flex items-center gap-3 px-3 py-2.5 rounded-xl text-ink-secondary hover:text-brand hover:bg-brand-light/60 transition">
+              <i data-lucide="book-open" class="w-4 h-4"></i>
+              <span>Summary Notes</span>
+            </button>
+          </nav>
+        </div>
+
+        <!-- Practice & Active Recall Section -->
+        <div>
+          <p class="px-3 text-[10px] font-bold text-ink-light uppercase tracking-wider mb-2">Practice & Recall</p>
+          <nav class="space-y-1 text-sm font-medium">
+            <button onclick="switchScreen('quiz')" id="nav-quiz" class="w-full flex items-center gap-3 px-3 py-2.5 rounded-xl text-ink-secondary hover:text-brand hover:bg-brand-light/60 transition">
+              <i data-lucide="check-circle-2" class="w-4 h-4"></i>
+              <span>Practice Quiz</span>
+            </button>
+            <button onclick="switchScreen('flashcards')" id="nav-flashcards" class="w-full flex items-center gap-3 px-3 py-2.5 rounded-xl text-ink-secondary hover:text-brand hover:bg-brand-light/60 transition">
+              <i data-lucide="layers" class="w-4 h-4"></i>
+              <span>Flashcards (3D)</span>
+            </button>
+            <button onclick="switchScreen('mind-maps')" id="nav-mind-maps" class="w-full flex items-center gap-3 px-3 py-2.5 rounded-xl text-ink-secondary hover:text-brand hover:bg-brand-light/60 transition">
+              <i data-lucide="network" class="w-4 h-4"></i>
+              <span>Mind Maps</span>
+            </button>
+            <button onclick="switchScreen('exam-simulator')" id="nav-exam-simulator" class="w-full flex items-center gap-3 px-3 py-2.5 rounded-xl text-ink-secondary hover:text-brand hover:bg-brand-light/60 transition">
+              <i data-lucide="timer" class="w-4 h-4"></i>
+              <span>Exam Simulator</span>
+            </button>
+          </nav>
+        </div>
+
+        <!-- Personalized Growth & Languages -->
+        <div>
+          <p class="px-3 text-[10px] font-bold text-ink-light uppercase tracking-wider mb-2">Growth & Polyglot</p>
+          <nav class="space-y-1 text-sm font-medium">
+            <button onclick="switchScreen('language-tutor')" id="nav-language-tutor" class="w-full flex items-center gap-3 px-3 py-2.5 rounded-xl text-ink-secondary hover:text-brand hover:bg-brand-light/60 transition">
+              <i data-lucide="languages" class="w-4 h-4"></i>
+              <span class="flex-1 text-left">Language Tutor</span>
+              <span class="text-[9px] font-bold px-1.5 py-0.5 rounded-md bg-emerald-50 text-mint">10 Indic</span>
+            </button>
+            <button onclick="switchScreen('planner')" id="nav-planner" class="w-full flex items-center gap-3 px-3 py-2.5 rounded-xl text-ink-secondary hover:text-brand hover:bg-brand-light/60 transition">
+              <i data-lucide="calendar" class="w-4 h-4"></i>
+              <span>Study Planner</span>
+            </button>
+            <button onclick="switchScreen('progress')" id="nav-progress" class="w-full flex items-center gap-3 px-3 py-2.5 rounded-xl text-ink-secondary hover:text-brand hover:bg-brand-light/60 transition">
+              <i data-lucide="award" class="w-4 h-4"></i>
+              <span>Progress & Badges</span>
+            </button>
+            <button onclick="switchScreen('settings')" id="nav-settings" class="w-full flex items-center gap-3 px-3 py-2.5 rounded-xl text-ink-secondary hover:text-brand hover:bg-brand-light/60 transition">
+              <i data-lucide="settings" class="w-4 h-4"></i>
+              <span>Settings</span>
+            </button>
+          </nav>
+        </div>
+      </div>
+
+      <!-- Ambassador Candidate Showcase Card in Sidebar Footer -->
+      <div class="mt-auto p-4 border-t border-border-subtle bg-surface-page/70">
+        <div class="p-3 bg-brand-light rounded-2xl border border-brand/20 text-xs">
+          <div class="flex items-center gap-2 mb-1">
+            <i data-lucide="graduation-cap" class="w-4 h-4 text-brand"></i>
+            <span class="font-bold text-brand">Google Ambassador Project</span>
+          </div>
+          <p class="text-[11px] text-ink-secondary leading-relaxed">
+            Targeted for business students to transition case theories into structured mastery with Gemini AI.
+          </p>
+        </div>
+      </div>
+    </aside>
+
+    <!-- MOBILE DRAWER MODAL -->
+    <div id="mobileDrawer" class="fixed inset-0 z-50 bg-ink-main/40 backdrop-blur-sm hidden lg:hidden">
+      <div class="w-72 bg-white h-full flex flex-col p-4 overflow-y-auto">
+        <div class="flex items-center justify-between pb-4 border-b border-border-subtle">
+          <div class="flex items-center gap-2">
+            <div class="w-8 h-8 rounded-lg bg-brand text-white flex items-center justify-center font-bold">
+              <i data-lucide="sparkles" class="w-4 h-4"></i>
+            </div>
+            <span class="font-bold text-ink-main">EduBridge AI</span>
+          </div>
+          <button id="closeMobileDrawer" class="p-1.5 rounded-lg text-ink-secondary hover:bg-surface-page">
+            <i data-lucide="x" class="w-5 h-5"></i>
+          </button>
+        </div>
+        <div class="py-4 space-y-1 text-sm font-medium" id="mobileNavContainer">
+          <!-- Populated dynamically / mirrors desktop links -->
+        </div>
+      </div>
+    </div>
+
+    <!-- MAIN SCROLLABLE CONTENT VIEWPORT -->
+    <main class="flex-1 overflow-y-auto bg-surface-page relative pb-16">
+      
+      <!-- ========================================== -->
+      <!-- SCREEN 1: PUBLIC LANDING PAGE (Preview)   -->
+      <!-- ========================================== -->
+      <section id="screen-landing" class="hidden min-h-full">
+        <!-- Landing Hero -->
+        <div class="max-w-6xl mx-auto px-4 sm:px-6 pt-12 pb-16 text-center">
+          <div class="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-brand-light text-brand text-xs font-semibold mb-6 border border-brand/20">
+            <i data-lucide="sparkles" class="w-3.5 h-3.5"></i>
+            Empowering Business & Higher Education with Google Gemini
+          </div>
+          <h1 class="text-3xl sm:text-5xl lg:text-6xl font-extrabold text-ink-main tracking-tight leading-[1.15]">
+            Your Personal AI <span class="text-brand">Learning Companion</span>
+          </h1>
+          <p class="mt-5 max-w-2xl mx-auto text-base sm:text-lg text-ink-secondary leading-relaxed">
+            EduBridge AI transforms unstructured textbooks, business case studies, and complex lecture slides into interactive summaries, Socratic tutoring sessions, and adaptive practice quizzes.
+          </p>
+
+          <div class="mt-8 flex flex-col sm:flex-row items-center justify-center gap-3">
+            <button onclick="switchScreen('dashboard')" class="w-full sm:w-auto px-7 py-3.5 rounded-xl bg-brand hover:bg-brand-dark text-white font-bold text-sm shadow-purple-glow transition flex items-center justify-center gap-2">
+              <span>Start Learning Free</span>
+              <i data-lucide="arrow-right" class="w-4 h-4"></i>
+            </button>
+            <button onclick="switchScreen('ai-tutor')" class="w-full sm:w-auto px-7 py-3.5 rounded-xl bg-white border border-border-subtle hover:border-brand text-ink-main font-semibold text-sm transition flex items-center justify-center gap-2">
+              <i data-lucide="bot" class="w-4 h-4 text-brand"></i>
+              <span>Try Socratic Tutor</span>
+            </button>
+          </div>
+
+          <!-- Feature Cards Grid -->
+          <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mt-16 text-left">
+            <div class="bg-white p-6 rounded-2xl border border-border-subtle shadow-card-sm">
+              <div class="w-10 h-10 rounded-xl bg-brand-light text-brand flex items-center justify-center mb-4">
+                <i data-lucide="bot" class="w-5 h-5"></i>
+              </div>
+              <h3 class="font-bold text-ink-main text-base mb-2">Socratic Business Tutor</h3>
+              <p class="text-xs text-ink-secondary leading-relaxed">
+                Trained to challenge students with Harvard-style follow-ups instead of giving away raw answers, fostering true analytical rigor.
+              </p>
+            </div>
+            <div class="bg-white p-6 rounded-2xl border border-border-subtle shadow-card-sm">
+              <div class="w-10 h-10 rounded-xl bg-emerald-50 text-mint flex items-center justify-center mb-4">
+                <i data-lucide="file-search" class="w-5 h-5"></i>
+              </div>
+              <h3 class="font-bold text-ink-main text-base mb-2">Multimodal PDF Synthesizer</h3>
+              <p class="text-xs text-ink-secondary leading-relaxed">
+                Upload 100-page syllabi or case studies. Extract executive summaries, formulas, and instant revision decks in seconds.
+              </p>
+            </div>
+            <div class="bg-white p-6 rounded-2xl border border-border-subtle shadow-card-sm">
+              <div class="w-10 h-10 rounded-xl bg-amber-light text-amber-warm flex items-center justify-center mb-4">
+                <i data-lucide="languages" class="w-5 h-5"></i>
+              </div>
+              <h3 class="font-bold text-ink-main text-base mb-2">10 Regional Indian Languages</h3>
+              <p class="text-xs text-ink-secondary leading-relaxed">
+                Democratizing higher education across India with localized explanations in Hindi, Bengali, Tamil, Telugu, and more.
+              </p>
+            </div>
+          </div>
+
+          <!-- Roadmap for Ambassador Selection Panel -->
+          <div class="mt-16 bg-white rounded-3xl p-8 border border-border-subtle text-left">
+            <div class="flex items-center justify-between mb-4 flex-wrap gap-2">
+              <div>
+                <span class="text-xs font-bold uppercase tracking-wider text-brand">Architecture Roadmap</span>
+                <h4 class="text-lg font-bold text-ink-main">Built for Google for Education Ecosystem</h4>
+              </div>
+              <span class="px-3 py-1 rounded-full text-xs font-semibold bg-brand-light text-brand border border-brand/20">Phase 1: Frontend Prototype</span>
+              <span class="px-3 py-1 rounded-full text-xs font-semibold bg-amber-light text-amber-warm border border-amber-warm/30">Demo data • AI/backend integrations pending</span>
+            </div>
+            <p class="text-xs text-ink-secondary mb-6 leading-relaxed">
+              Designed by a BBA undergraduate to bridge practical classroom problems with Google technology. Demonstrating zero-latency UI interactions now, primed for Google Cloud Functions and Firebase Firestore integration.
+            </p>
+            <div class="grid grid-cols-1 sm:grid-cols-3 gap-4 text-xs">
+              <div class="p-3 rounded-xl bg-surface-page border border-border-subtle">
+                <p class="font-bold text-ink-main mb-1">1. Frontend UX (Active)</p>
+                <p class="text-ink-secondary">Complete single-file lightweight HTML5 + Tailwind CSS interactive design system.</p>
+              </div>
+              <div class="p-3 rounded-xl bg-surface-page border border-border-subtle">
+                <p class="font-bold text-ink-main mb-1">2. Gemini API (Planned)</p>
+                <p class="text-ink-secondary">Planned integration: connect a supported Gemini API model through a secure backend for structured quiz generation, tutoring, and document analysis.</p>
+              </div>
+              <div class="p-3 rounded-xl bg-surface-page border border-border-subtle">
+                <p class="font-bold text-ink-main mb-1">3. Workspace Sync (Planned)</p>
+                <p class="text-ink-secondary">Planned integration: Google Workspace export and Classroom workflows are not connected in this prototype yet.</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ========================================== -->
+      <!-- SCREEN 2: STUDENT DASHBOARD (DEFAULT VIEW)-->
+      <!-- ========================================== -->
+      <section id="screen-dashboard" class="p-4 sm:p-6 lg:p-8 max-w-7xl mx-auto space-y-6">
+        
+        <!-- Welcome Banner & Motivational Greeting -->
+        <div class="bg-gradient-to-r from-brand via-[#7E6EF2] to-[#9284F8] rounded-3xl p-6 sm:p-8 text-white shadow-card-lg relative overflow-hidden">
+          <div class="relative z-10 max-w-2xl">
+            <div class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-white/20 backdrop-blur-sm text-xs font-semibold mb-3">
+              <span>🎯 Semester Midterm Sprint</span>
+              <span class="text-white/70">•</span>
+              <span>Week 6 of 14</span>
+            </div>
+            <h2 class="text-2xl sm:text-3xl font-extrabold tracking-tight">
+              Welcome back, Rohon! 👋
+            </h2>
+            <p class="mt-2 text-sm sm:text-base text-white/90 font-medium leading-relaxed">
+              "Mastery is not about cramming facts, but connecting frameworks to real-world impact." You're on track for your 90% Business Strategy benchmark!
+            </p>
+            <div class="mt-5 flex flex-wrap items-center gap-3">
+              <button onclick="switchScreen('ai-tutor')" class="px-4 py-2.5 rounded-xl bg-white text-brand hover:bg-brand-light font-bold text-xs shadow-sm transition flex items-center gap-2">
+                <i data-lucide="sparkles" class="w-4 h-4"></i>
+                <span>Ask AI Tutor Anything</span>
+              </button>
+              <button onclick="switchScreen('quiz')" class="px-4 py-2.5 rounded-xl bg-white/15 hover:bg-white/25 text-white font-semibold text-xs border border-white/20 transition flex items-center gap-2">
+                <i data-lucide="play" class="w-4 h-4"></i>
+                <span>Resume Daily Practice</span>
+              </button>
+            </div>
+          </div>
+          <!-- Decorative Background Elements -->
+          <div class="absolute -right-8 -bottom-12 w-64 h-64 rounded-full bg-white/10 blur-2xl pointer-events-none"></div>
+          <div class="absolute right-12 top-6 opacity-20 hidden md:block">
+            <i data-lucide="brain-circuit" class="w-40 h-40"></i>
+          </div>
+        </div>
+
+        <!-- 4 Key Learning Metric Cards -->
+        <div class="grid grid-cols-2 lg:grid-cols-4 gap-4">
+          <!-- Metric 1 -->
+          <div class="bg-white p-5 rounded-2xl border border-border-subtle shadow-card-sm flex flex-col justify-between">
+            <div class="flex items-center justify-between text-ink-secondary mb-2">
+              <span class="text-xs font-semibold">Today's Focus</span>
+              <div class="w-8 h-8 rounded-lg bg-brand-light text-brand flex items-center justify-center">
+                <i data-lucide="clock" class="w-4 h-4"></i>
+              </div>
+            </div>
+            <div>
+              <p class="text-2xl font-bold text-ink-main">4.2 <span class="text-xs font-medium text-ink-secondary">hrs</span></p>
+              <p class="text-[11px] text-mint font-semibold mt-1 flex items-center gap-1">
+                <i data-lucide="trending-up" class="w-3 h-3"></i> +35 mins vs yesterday
+              </p>
+            </div>
+          </div>
+          <!-- Metric 2 -->
+          <div class="bg-white p-5 rounded-2xl border border-border-subtle shadow-card-sm flex flex-col justify-between">
+            <div class="flex items-center justify-between text-ink-secondary mb-2">
+              <span class="text-xs font-semibold">Quizzes Mastered</span>
+              <div class="w-8 h-8 rounded-lg bg-emerald-50 text-mint flex items-center justify-center">
+                <i data-lucide="check-check" class="w-4 h-4"></i>
+              </div>
+            </div>
+            <div>
+              <p class="text-2xl font-bold text-ink-main">8 <span class="text-xs font-medium text-ink-secondary">completed</span></p>
+              <p class="text-[11px] text-ink-secondary mt-1">94% average accuracy</p>
+            </div>
+          </div>
+          <!-- Metric 3 -->
+          <div class="bg-white p-5 rounded-2xl border border-border-subtle shadow-card-sm flex flex-col justify-between">
+            <div class="flex items-center justify-between text-ink-secondary mb-2">
+              <span class="text-xs font-semibold">Concept Retention</span>
+              <div class="w-8 h-8 rounded-lg bg-amber-light text-amber-warm flex items-center justify-center">
+                <i data-lucide="target" class="w-4 h-4"></i>
+              </div>
+            </div>
+            <div>
+              <p class="text-2xl font-bold text-ink-main">92%</p>
+              <div class="w-full bg-surface-page rounded-full h-1.5 mt-2 overflow-hidden">
+                <div class="bg-brand h-full rounded-full" style="width: 92%"></div>
+              </div>
+            </div>
+          </div>
+          <!-- Metric 4 -->
+          <div class="bg-white p-5 rounded-2xl border border-border-subtle shadow-card-sm flex flex-col justify-between">
+            <div class="flex items-center justify-between text-ink-secondary mb-2">
+              <span class="text-xs font-semibold">Active Streak</span>
+              <div class="w-8 h-8 rounded-lg bg-rose-50 text-rose-500 flex items-center justify-center">
+                <i data-lucide="flame" class="w-4 h-4"></i>
+              </div>
+            </div>
+            <div>
+              <p class="text-2xl font-bold text-ink-main">14 <span class="text-xs font-medium text-ink-secondary">days</span></p>
+              <p class="text-[11px] text-brand font-semibold mt-1">Badge unlocks at 15!</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Quick Action Hub (Essential Fast Links) -->
+        <div>
+          <h3 class="text-sm font-bold text-ink-main uppercase tracking-wider mb-3">Quick Learning Actions</h3>
+          <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-3">
+            <button onclick="switchScreen('ai-tutor')" class="p-4 bg-white rounded-2xl border border-border-subtle hover:border-brand hover:shadow-card-md transition group text-left">
+              <div class="w-10 h-10 rounded-xl bg-brand-light text-brand flex items-center justify-center mb-2 group-hover:scale-105 transition">
+                <i data-lucide="bot" class="w-5 h-5"></i>
+              </div>
+              <p class="text-xs font-bold text-ink-main group-hover:text-brand">AI Tutor</p>
+              <p class="text-[10px] text-ink-secondary">Socratic Q&A</p>
+            </button>
+            <button onclick="switchScreen('pdf-reader')" class="p-4 bg-white rounded-2xl border border-border-subtle hover:border-brand hover:shadow-card-md transition group text-left">
+              <div class="w-10 h-10 rounded-xl bg-blue-50 text-blue-600 flex items-center justify-center mb-2 group-hover:scale-105 transition">
+                <i data-lucide="file-up" class="w-5 h-5"></i>
+              </div>
+              <p class="text-xs font-bold text-ink-main group-hover:text-brand">PDF Reader</p>
+              <p class="text-[10px] text-ink-secondary">Synthesize Case</p>
+            </button>
+            <button onclick="switchScreen('quiz')" class="p-4 bg-white rounded-2xl border border-border-subtle hover:border-brand hover:shadow-card-md transition group text-left">
+              <div class="w-10 h-10 rounded-xl bg-emerald-50 text-mint flex items-center justify-center mb-2 group-hover:scale-105 transition">
+                <i data-lucide="help-circle" class="w-5 h-5"></i>
+              </div>
+              <p class="text-xs font-bold text-ink-main group-hover:text-brand">Practice Quiz</p>
+              <p class="text-[10px] text-ink-secondary">Active Recall</p>
+            </button>
+            <button onclick="switchScreen('flashcards')" class="p-4 bg-white rounded-2xl border border-border-subtle hover:border-brand hover:shadow-card-md transition group text-left">
+              <div class="w-10 h-10 rounded-xl bg-amber-light text-amber-warm flex items-center justify-center mb-2 group-hover:scale-105 transition">
+                <i data-lucide="layers" class="w-5 h-5"></i>
+              </div>
+              <p class="text-xs font-bold text-ink-main group-hover:text-brand">Flashcards</p>
+              <p class="text-[10px] text-ink-secondary">3D Flip Decks</p>
+            </button>
+            <button onclick="switchScreen('mind-maps')" class="p-4 bg-white rounded-2xl border border-border-subtle hover:border-brand hover:shadow-card-md transition group text-left">
+              <div class="w-10 h-10 rounded-xl bg-purple-50 text-purple-600 flex items-center justify-center mb-2 group-hover:scale-105 transition">
+                <i data-lucide="network" class="w-5 h-5"></i>
+              </div>
+              <p class="text-xs font-bold text-ink-main group-hover:text-brand">Mind Maps</p>
+              <p class="text-[10px] text-ink-secondary">Visual Nodes</p>
+            </button>
+            <button onclick="switchScreen('exam-simulator')" class="p-4 bg-white rounded-2xl border border-border-subtle hover:border-brand hover:shadow-card-md transition group text-left">
+              <div class="w-10 h-10 rounded-xl bg-rose-50 text-rose-500 flex items-center justify-center mb-2 group-hover:scale-105 transition">
+                <i data-lucide="timer" class="w-5 h-5"></i>
+              </div>
+              <p class="text-xs font-bold text-ink-main group-hover:text-brand">Exam Drill</p>
+              <p class="text-[10px] text-ink-secondary">Timed Simulation</p>
+            </button>
+          </div>
+        </div>
+
+        <!-- 2-Column Main Section: Left (Continue Learning & Goals) / Right (Weekly Analytics & Schedule) -->
+        <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+          
+          <!-- Column Left (2 Spans): Continue Learning & Interactive Goals -->
+          <div class="lg:col-span-2 space-y-6">
+            
+            <!-- Continue Learning Card -->
+            <div class="bg-white p-6 rounded-3xl border border-border-subtle shadow-card-sm">
+              <div class="flex items-center justify-between mb-4">
+                <h3 class="text-sm font-bold text-ink-main">Continue Recent Study</h3>
+                <span class="text-xs text-brand font-semibold hover:underline cursor-pointer" onclick="switchScreen('summary-notes')">View all chapters</span>
+              </div>
+              
+              <div class="p-4 rounded-2xl bg-surface-page border border-border-subtle flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
+                <div class="flex items-center gap-3.5">
+                  <div class="w-12 h-12 rounded-xl bg-brand text-white flex items-center justify-center font-bold text-base shadow-sm">
+                    <i data-lucide="briefcase" class="w-6 h-6"></i>
+                  </div>
+                  <div>
+                    <div class="flex items-center gap-2">
+                      <span class="text-[10px] font-bold px-2 py-0.5 rounded-full bg-brand-light text-brand">BBA Core Strategy</span>
+                      <span class="text-[11px] text-ink-secondary">Harvard Case 04</span>
+                    </div>
+                    <h4 class="text-sm font-bold text-ink-main mt-0.5">Competitive Advantage & Porter's 5 Forces</h4>
+                    <p class="text-xs text-ink-secondary">Module 3: Supplier Bargaining Power in Digital Platforms</p>
+                  </div>
+                </div>
+                
+                <div class="w-full sm:w-auto flex sm:flex-col items-center sm:items-end justify-between gap-2">
+                  <span class="text-xs font-bold text-brand">68% Finished</span>
+                  <button onclick="switchScreen('summary-notes')" class="px-4 py-2 bg-brand text-white text-xs font-bold rounded-xl hover:bg-brand-dark transition shadow-sm">
+                    Resume Study
+                  </button>
+                </div>
+              </div>
+
+              <!-- Secondary recent card -->
+              <div class="mt-3 p-3.5 rounded-2xl border border-border-subtle hover:bg-surface-page transition flex items-center justify-between">
+                <div class="flex items-center gap-3">
+                  <div class="w-9 h-9 rounded-lg bg-emerald-50 text-mint flex items-center justify-center">
+                    <i data-lucide="pie-chart" class="w-4 h-4"></i>
+                  </div>
+                  <div>
+                    <h5 class="text-xs font-bold text-ink-main">Corporate Finance: Discounted Cash Flows</h5>
+                    <p class="text-[10px] text-ink-secondary">Last revised yesterday • 12 flashcards left</p>
+                  </div>
+                </div>
+                <button onclick="switchScreen('flashcards')" class="text-xs text-ink-secondary hover:text-brand font-semibold p-2">
+                  Review →
+                </button>
+              </div>
+            </div>
+
+            <!-- Interactive Study Goals with Dynamic Progress -->
+            <div class="bg-white p-6 rounded-3xl border border-border-subtle shadow-card-sm">
+              <div class="flex items-center justify-between mb-4">
+                <div>
+                  <h3 class="text-sm font-bold text-ink-main">Today's Study Checklist</h3>
+                  <p class="text-xs text-ink-secondary">Complete these targets to protect your 14-day streak</p>
+                </div>
+                <span id="goalCompletionBadge" class="text-xs font-bold px-2.5 py-1 rounded-full bg-brand-light text-brand">
+                  2 of 4 Done (50%)
+                </span>
+              </div>
+
+              <div class="space-y-3" id="studyGoalsList">
+                <label class="flex items-center gap-3 p-3 rounded-xl bg-surface-page border border-border-subtle cursor-pointer hover:bg-surface-muted transition">
+                  <input type="checkbox" checked onchange="updateGoalProgress()" class="goal-checkbox w-4 h-4 text-brand rounded border-border-subtle focus:ring-brand accent-brand cursor-pointer">
+                  <span class="text-xs text-ink-main font-medium line-through text-ink-secondary">Review Harvard Business Case: Netflix vs. Disney streaming economics</span>
+                  <span class="ml-auto text-[10px] font-bold px-2 py-0.5 rounded bg-white text-ink-secondary">30m</span>
+                </label>
+                <label class="flex items-center gap-3 p-3 rounded-xl bg-surface-page border border-border-subtle cursor-pointer hover:bg-surface-muted transition">
+                  <input type="checkbox" checked onchange="updateGoalProgress()" class="goal-checkbox w-4 h-4 text-brand rounded border-border-subtle focus:ring-brand accent-brand cursor-pointer">
+                  <span class="text-xs text-ink-main font-medium line-through text-ink-secondary">Complete 10-Question Active Recall Quiz on Porter's 5 Forces</span>
+                  <span class="ml-auto text-[10px] font-bold px-2 py-0.5 rounded bg-white text-ink-secondary">15m</span>
+                </label>
+                <label class="flex items-center gap-3 p-3 rounded-xl bg-white border border-border-subtle cursor-pointer hover:bg-surface-page transition">
+                  <input type="checkbox" onchange="updateGoalProgress()" class="goal-checkbox w-4 h-4 text-brand rounded border-border-subtle focus:ring-brand accent-brand cursor-pointer">
+                  <span class="text-xs text-ink-main font-medium">Generate Mind Map for Marketing 4Ps & Customer Journey</span>
+                  <span class="ml-auto text-[10px] font-bold px-2 py-0.5 rounded bg-brand-light text-brand">20m</span>
+                </label>
+                <label class="flex items-center gap-3 p-3 rounded-xl bg-white border border-border-subtle cursor-pointer hover:bg-surface-page transition">
+                  <input type="checkbox" onchange="updateGoalProgress()" class="goal-checkbox w-4 h-4 text-brand rounded border-border-subtle focus:ring-brand accent-brand cursor-pointer">
+                  <span class="text-xs text-ink-main font-medium">Practice 5 Bengali business terms in Language Tutor</span>
+                  <span class="ml-auto text-[10px] font-bold px-2 py-0.5 rounded bg-emerald-50 text-mint">10m</span>
+                </label>
+              </div>
+
+              <!-- Add New Goal Mini Input -->
+              <div class="mt-4 pt-3 border-t border-border-subtle flex gap-2">
+                <input id="newGoalInput" type="text" placeholder="Add custom study target..." class="flex-1 px-3 py-2 text-xs bg-surface-page border border-border-subtle rounded-xl focus:outline-none focus:border-brand">
+                <button onclick="addNewGoal()" class="px-4 py-2 bg-brand-light hover:bg-brand text-brand hover:text-white text-xs font-bold rounded-xl transition">
+                  + Add Goal
+                </button>
+              </div>
+            </div>
+          </div>
+
+          <!-- Column Right (1 Span): Weekly Study Activity & Exam Radar -->
+          <div class="space-y-6">
+            
+            <!-- Weekly Study Activity Chart (Pure CSS Bar Chart) -->
+            <div class="bg-white p-6 rounded-3xl border border-border-subtle shadow-card-sm">
+              <div class="flex items-center justify-between mb-4">
+                <h3 class="text-sm font-bold text-ink-main">Weekly Study Hours</h3>
+                <span class="text-xs font-bold text-mint">+12% vs last week</span>
+              </div>
+              
+              <!-- Bar Visualization -->
+              <div class="h-40 flex items-end justify-between gap-2 pt-4 px-2">
+                <div class="flex-1 flex flex-col items-center gap-1.5 h-full justify-end">
+                  <span class="text-[9px] text-ink-secondary">2.5h</span>
+                  <div class="w-full bg-brand-light rounded-t-lg transition hover:bg-brand" style="height: 45%"></div>
+                  <span class="text-[10px] font-medium text-ink-secondary">Mon</span>
+                </div>
+                <div class="flex-1 flex flex-col items-center gap-1.5 h-full justify-end">
+                  <span class="text-[9px] text-ink-secondary">3.8h</span>
+                  <div class="w-full bg-brand-light rounded-t-lg transition hover:bg-brand" style="height: 65%"></div>
+                  <span class="text-[10px] font-medium text-ink-secondary">Tue</span>
+                </div>
+                <div class="flex-1 flex flex-col items-center gap-1.5 h-full justify-end">
+                  <span class="text-[9px] text-ink-secondary">4.5h</span>
+                  <div class="w-full bg-brand-light rounded-t-lg transition hover:bg-brand" style="height: 80%"></div>
+                  <span class="text-[10px] font-medium text-ink-secondary">Wed</span>
+                </div>
+                <div class="flex-1 flex flex-col items-center gap-1.5 h-full justify-end">
+                  <span class="text-[9px] text-ink-secondary">3.0h</span>
+                  <div class="w-full bg-brand-light rounded-t-lg transition hover:bg-brand" style="height: 50%"></div>
+                  <span class="text-[10px] font-medium text-ink-secondary">Thu</span>
+                </div>
+                <div class="flex-1 flex flex-col items-center gap-1.5 h-full justify-end">
+                  <span class="text-[9px] text-ink-secondary">5.2h</span>
+                  <div class="w-full bg-brand-light rounded-t-lg transition hover:bg-brand" style="height: 90%"></div>
+                  <span class="text-[10px] font-medium text-ink-secondary">Fri</span>
+                </div>
+                <div class="flex-1 flex flex-col items-center gap-1.5 h-full justify-end">
+                  <span class="text-[9px] font-bold text-brand">4.2h</span>
+                  <div class="w-full bg-brand rounded-t-lg shadow-purple-glow" style="height: 75%"></div>
+                  <span class="text-[10px] font-bold text-brand">Today</span>
+                </div>
+                <div class="flex-1 flex flex-col items-center gap-1.5 h-full justify-end">
+                  <span class="text-[9px] text-ink-light">Plan</span>
+                  <div class="w-full bg-surface-muted rounded-t-lg" style="height: 40%"></div>
+                  <span class="text-[10px] font-medium text-ink-secondary">Sun</span>
+                </div>
+              </div>
+
+              <div class="mt-4 pt-3 border-t border-border-subtle flex items-center justify-between text-xs text-ink-secondary">
+                <span>Total: <strong class="text-ink-main">23.2 Hours</strong></span>
+                <span class="text-brand font-semibold cursor-pointer" onclick="switchScreen('progress')">Full Analytics →</span>
+              </div>
+            </div>
+
+            <!-- Upcoming Exam Schedule -->
+            <div class="bg-white p-6 rounded-3xl border border-border-subtle shadow-card-sm">
+              <div class="flex items-center justify-between mb-3">
+                <h3 class="text-sm font-bold text-ink-main">Upcoming Examinations</h3>
+                <i data-lucide="calendar" class="w-4 h-4 text-ink-secondary"></i>
+              </div>
+              <div class="space-y-3">
+                <div class="p-3 rounded-2xl bg-surface-page border border-border-subtle flex items-center justify-between">
+                  <div>
+                    <span class="text-[10px] font-bold uppercase text-rose-500">In 4 Days</span>
+                    <h5 class="text-xs font-bold text-ink-main">Strategic Management Midterm</h5>
+                    <p class="text-[10px] text-ink-secondary">Case Analysis & 4Ps</p>
+                  </div>
+                  <button onclick="switchScreen('exam-simulator')" class="p-2 rounded-xl bg-white hover:bg-brand-light text-brand shadow-sm transition">
+                    <i data-lucide="play" class="w-3.5 h-3.5"></i>
+                  </button>
+                </div>
+                <div class="p-3 rounded-2xl bg-surface-page border border-border-subtle flex items-center justify-between">
+                  <div>
+                    <span class="text-[10px] font-bold uppercase text-amber-warm">In 12 Days</span>
+                    <h5 class="text-xs font-bold text-ink-main">Managerial Economics</h5>
+                    <p class="text-[10px] text-ink-secondary">Elasticity & Market Structures</p>
+                  </div>
+                  <button onclick="switchScreen('exam-simulator')" class="p-2 rounded-xl bg-white hover:bg-brand-light text-brand shadow-sm transition">
+                    <i data-lucide="play" class="w-3.5 h-3.5"></i>
+                  </button>
+                </div>
+              </div>
+            </div>
+
+            <!-- Recommended AI Topic Chips -->
+            <div class="bg-brand-subtle p-5 rounded-3xl border border-brand/20">
+              <h4 class="text-xs font-bold text-brand uppercase tracking-wider mb-2 flex items-center gap-1.5">
+                <i data-lucide="sparkles" class="w-3.5 h-3.5"></i>
+                Recommended For You
+              </h4>
+              <p class="text-[11px] text-ink-secondary mb-3">AI identified weak confidence points in your last quiz:</p>
+              <div class="flex flex-wrap gap-2">
+                <button onclick="quickAskTutor('Explain Porter\'s Threat of Substitutes with a digital streaming example')" class="text-[11px] font-semibold px-2.5 py-1 bg-white hover:bg-brand hover:text-white text-ink-main rounded-lg border border-border-subtle transition">
+                  Threat of Substitutes ⚡
+                </button>
+                <button onclick="quickAskTutor('How to calculate Weighted Average Cost of Capital (WACC) step by step?')" class="text-[11px] font-semibold px-2.5 py-1 bg-white hover:bg-brand hover:text-white text-ink-main rounded-lg border border-border-subtle transition">
+                  WACC Formula 📊
+                </button>
+                <button onclick="quickAskTutor('Give me a real-world case on price elasticity in retail')" class="text-[11px] font-semibold px-2.5 py-1 bg-white hover:bg-brand hover:text-white text-ink-main rounded-lg border border-border-subtle transition">
+                  Price Elasticity 🏷️
+                </button>
+              </div>
+            </div>
+
+          </div>
+        </div>
+      </section>
+
+      <!-- ========================================== -->
+      <!-- SCREEN 3: AI TUTOR (GEMINI CONVERSATIONAL)-->
+      <!-- ========================================== -->
+      <section id="screen-ai-tutor" class="hidden p-4 sm:p-6 lg:p-8 max-w-5xl mx-auto h-[calc(100vh-5rem)] flex flex-col">
+        <!-- Tutor Header -->
+        <div class="bg-white p-4 rounded-2xl border border-border-subtle shadow-card-sm flex items-center justify-between mb-4 flex-shrink-0">
+          <div class="flex items-center gap-3">
+            <div class="w-10 h-10 rounded-xl bg-brand text-white flex items-center justify-center shadow-purple-glow">
+              <i data-lucide="bot" class="w-5 h-5"></i>
+            </div>
+            <div>
+              <div class="flex items-center gap-2">
+                <h3 class="text-sm font-bold text-ink-main">EduBridge Socratic Tutor</h3>
+                <span class="text-[10px] font-bold px-2 py-0.5 rounded-full bg-emerald-50 text-mint border border-emerald-200">
+                  Google Gemini 3.0 Engine
+                </span>
+              </div>
+              <p class="text-[11px] text-ink-secondary">Trained to guide your reasoning through Socratic inquiry</p>
+            </div>
+          </div>
+          
+          <!-- Subject Switcher -->
+          <div class="flex items-center gap-2">
+            <select id="tutorSubjectSelect" class="text-xs font-semibold px-3 py-2 rounded-xl bg-surface-page border border-border-subtle text-ink-main focus:outline-none focus:border-brand">
+              <option value="strategy">Strategic Management (BBA)</option>
+              <option value="finance">Corporate Finance</option>
+              <option value="economics">Managerial Economics</option>
+              <option value="marketing">Brand Marketing 4Ps</option>
+            </select>
+            <button onclick="clearTutorChat()" class="p-2 text-ink-secondary hover:text-brand hover:bg-brand-light rounded-xl transition" title="Clear conversation">
+              <i data-lucide="rotate-ccw" class="w-4 h-4"></i>
+            </button>
+          </div>
+        </div>
+
+        <!-- Scrollable Messages Container -->
+        <div id="tutorChatContainer" class="flex-1 bg-white rounded-2xl border border-border-subtle p-4 sm:p-6 overflow-y-auto space-y-4 mb-4 shadow-card-sm">
+          <!-- Initial AI Message -->
+          <div class="flex items-start gap-3 max-w-2xl">
+            <div class="w-8 h-8 rounded-lg bg-brand-light text-brand flex items-center justify-center flex-shrink-0 font-bold text-xs">
+              AI
+            </div>
+            <div class="bg-surface-page p-4 rounded-2xl rounded-tl-none border border-border-subtle text-xs text-ink-main leading-relaxed">
+              <p class="font-bold text-brand mb-1">Hello Rohon! I am your EduBridge Business Strategy Tutor.</p>
+              <p>This is a front-end demo exploring <strong>Porter's Five Forces</strong> and <strong>Market Entry Strategies</strong>. Replies are sample, rule-based responses; live Gemini integration has not been connected yet.</p>
+              <p class="mt-2 text-ink-secondary">What concept would you like to dissect today, or would you like me to test your comprehension on a retail case?</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Quick Prompt Chips -->
+        <div class="flex items-center gap-2 overflow-x-auto pb-2 flex-shrink-0 text-xs">
+          <span class="text-[11px] text-ink-secondary font-semibold flex-shrink-0">Prompt chips:</span>
+          <button onclick="sendQuickPrompt('Explain this concept simply with an everyday analogy')" class="px-3 py-1.5 bg-white hover:bg-brand-light text-ink-secondary hover:text-brand rounded-full border border-border-subtle whitespace-nowrap transition">
+            💡 Explain simply
+          </button>
+          <button onclick="sendQuickPrompt('Give me a real-world business case example')" class="px-3 py-1.5 bg-white hover:bg-brand-light text-ink-secondary hover:text-brand rounded-full border border-border-subtle whitespace-nowrap transition">
+            🏢 Real-world example
+          </button>
+          <button onclick="sendQuickPrompt('Test my understanding with a challenging question')" class="px-3 py-1.5 bg-white hover:bg-brand-light text-ink-secondary hover:text-brand rounded-full border border-border-subtle whitespace-nowrap transition">
+            🎯 Test my understanding
+          </button>
+          <button onclick="sendQuickPrompt('Explain step-by-step how to evaluate high supplier power')" class="px-3 py-1.5 bg-white hover:bg-brand-light text-ink-secondary hover:text-brand rounded-full border border-border-subtle whitespace-nowrap transition">
+            🪜 Step-by-step breakdown
+          </button>
+        </div>
+
+        <!-- Message Input Bar -->
+        <div class="bg-white p-3 rounded-2xl border border-border-subtle shadow-card-sm flex items-center gap-2 flex-shrink-0">
+          <input 
+            type="text" 
+            id="tutorInput" 
+            placeholder="Ask a question or explain your reasoning (e.g. 'How does Netflix mitigate bargaining power of content suppliers?')..." 
+            class="flex-1 px-4 py-2 text-xs sm:text-sm bg-surface-page rounded-xl border border-border-subtle focus:outline-none focus:border-brand"
+            onkeydown="if(event.key === 'Enter') handleTutorSend()"
+          />
+          <button onclick="handleTutorSend()" class="px-5 py-2.5 rounded-xl bg-brand hover:bg-brand-dark text-white text-xs font-bold shadow-purple-glow transition flex items-center gap-1.5">
+            <span>Send</span>
+            <i data-lucide="send" class="w-3.5 h-3.5"></i>
+          </button>
+        </div>
+      </section>
+
+      <!-- ========================================== -->
+      <!-- SCREEN 4: EXPLAIN A CONCEPT               -->
+      <!-- ========================================== -->
+      <section id="screen-concept-explainer" class="hidden p-4 sm:p-6 lg:p-8 max-w-5xl mx-auto space-y-6">
+        <div class="bg-white p-6 rounded-3xl border border-border-subtle shadow-card-sm">
+          <div class="flex items-center gap-3 mb-4">
+            <div class="w-10 h-10 rounded-xl bg-brand-light text-brand flex items-center justify-center">
+              <i data-lucide="lightbulb" class="w-5 h-5"></i>
+            </div>
+            <div>
+              <h2 class="text-lg font-bold text-ink-main">Concept Deep-Dive Engine</h2>
+              <p class="text-xs text-ink-secondary">Transform complex academic theory into intuitive, structured knowledge</p>
+            </div>
+          </div>
+
+          <!-- Input Controls -->
+          <div class="grid grid-cols-1 sm:grid-cols-4 gap-3 mb-4">
+            <div class="sm:col-span-2">
+              <label class="text-[11px] font-bold text-ink-secondary uppercase">Concept or Theory</label>
+              <input type="text" id="conceptTopicInput" value="Porter's Five Forces Framework" class="w-full mt-1 px-3 py-2 text-xs bg-surface-page border border-border-subtle rounded-xl focus:border-brand focus:outline-none">
+            </div>
+            <div>
+              <label class="text-[11px] font-bold text-ink-secondary uppercase">Audience Level</label>
+              <select class="w-full mt-1 px-3 py-2 text-xs bg-surface-page border border-border-subtle rounded-xl focus:border-brand">
+                <option>Undergraduate (BBA)</option>
+                <option>High School</option>
+                <option>MBA / Executive</option>
+              </select>
+            </div>
+            <div>
+              <label class="text-[11px] font-bold text-ink-secondary uppercase">Explanation Style</label>
+              <select class="w-full mt-1 px-3 py-2 text-xs bg-surface-page border border-border-subtle rounded-xl focus:border-brand">
+                <option>Case Study & Analogy</option>
+                <option>First Principles</option>
+                <option>Executive Brief</option>
+              </select>
+            </div>
+          </div>
+
+          <button onclick="simulateConceptGeneration()" class="px-5 py-2.5 bg-brand text-white text-xs font-bold rounded-xl hover:bg-brand-dark transition shadow-purple-glow flex items-center gap-2">
+            <i data-lucide="sparkles" class="w-4 h-4"></i>
+            <span>Generate Structured Explanation</span>
+          </button>
+        </div>
+
+        <!-- Rendered Explanation Card -->
+        <div id="conceptOutputCard" class="bg-white p-6 sm:p-8 rounded-3xl border border-border-subtle shadow-card-sm space-y-6">
+          <div class="flex items-center justify-between border-b border-border-subtle pb-4">
+            <div>
+              <span class="text-[10px] font-bold px-2 py-0.5 rounded-full bg-brand-light text-brand">Strategic Management</span>
+              <h3 class="text-xl font-extrabold text-ink-main mt-1">Porter's Five Forces: Competitive Intensity Analysis</h3>
+            </div>
+            <div class="flex gap-2">
+              <button onclick="switchScreen('quiz')" class="px-3 py-1.5 rounded-xl border border-border-subtle hover:border-brand text-xs font-semibold text-ink-secondary hover:text-brand transition flex items-center gap-1.5">
+                <i data-lucide="check-circle" class="w-3.5 h-3.5"></i>
+                <span>Practice Questions</span>
+              </button>
+              <button onclick="switchScreen('summary-notes')" class="px-3 py-1.5 rounded-xl bg-brand-light text-brand text-xs font-bold hover:bg-brand hover:text-white transition flex items-center gap-1.5">
+                <i data-lucide="bookmark" class="w-3.5 h-3.5"></i>
+                <span>Save to Notes</span>
+              </button>
+            </div>
+          </div>
+
+          <!-- Structured Section 1: Executive Summary -->
+          <div class="space-y-2">
+            <h4 class="text-sm font-bold text-ink-main flex items-center gap-2">
+              <span class="w-1.5 h-4 bg-brand rounded-full"></span>
+              Core Definition & Purpose
+            </h4>
+            <p class="text-xs text-ink-secondary leading-relaxed pl-3.5">
+              Formulated by Harvard Business School Professor Michael E. Porter in 1979, the Five Forces framework evaluates the competitive environment and long-term profitability of an industry. Rather than viewing competition as merely rival companies, Porter identifies five distinct structural forces shaping market attractiveness.
+            </p>
+          </div>
+
+          <!-- The Five Forces Grid -->
+          <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3 text-xs">
+            <div class="p-4 rounded-2xl bg-surface-page border border-border-subtle">
+              <span class="font-bold text-brand">1. Threat of New Entrants</span>
+              <p class="text-ink-secondary mt-1">How easily new competitors enter. Governed by economies of scale, capital requirements, and patents.</p>
+            </div>
+            <div class="p-4 rounded-2xl bg-surface-page border border-border-subtle">
+              <span class="font-bold text-brand">2. Supplier Bargaining Power</span>
+              <p class="text-ink-secondary mt-1">Suppliers hold power if they are concentrated, have high switching costs, or offer unique inputs (e.g. TSMC in microchips).</p>
+            </div>
+            <div class="p-4 rounded-2xl bg-surface-page border border-border-subtle">
+              <span class="font-bold text-brand">3. Buyer Bargaining Power</span>
+              <p class="text-ink-secondary mt-1">Consumers pressure prices downward when substitution costs are zero or when purchases represent large volume.</p>
+            </div>
+            <div class="p-4 rounded-2xl bg-surface-page border border-border-subtle">
+              <span class="font-bold text-brand">4. Threat of Substitutes</span>
+              <p class="text-ink-secondary mt-1">Alternative products fulfilling the same functional need (e.g., High-speed trains substituting domestic flights).</p>
+            </div>
+            <div class="p-4 rounded-2xl bg-surface-page border border-border-subtle md:col-span-2">
+              <span class="font-bold text-brand">5. Industry Rivalry</span>
+              <p class="text-ink-secondary mt-1">The intensity of competition between incumbents. High when competitors are equally sized and industry growth is stagnant.</p>
+            </div>
+          </div>
+
+          <!-- Real-world Harvard Case Application -->
+          <div class="p-4 rounded-2xl bg-amber-light border border-amber-warm/30 text-xs">
+            <h5 class="font-bold text-ink-main flex items-center gap-1.5 mb-1">
+              <span>💡 Real-World BBA Case Example: Commercial Airline Industry</span>
+            </h5>
+            <p class="text-ink-secondary leading-relaxed">
+              Why are airlines historically low-margin? <strong>High Supplier Power:</strong> Boeing and Airbus form a duopoly; jet fuel prices are uncontrollable. <strong>High Buyer Power:</strong> Consumers compare ticket aggregators within seconds with zero switching cost. <strong>High Rivalry:</strong> Fixed seat inventory perishes the moment the flight takes off.
+            </p>
+          </div>
+        </div>
+      </section>
+
+      <!-- ========================================== -->
+      <!-- SCREEN 5: PDF READER & CHAPTER UPLOADER   -->
+      <!-- ========================================== -->
+      <section id="screen-pdf-reader" class="hidden p-4 sm:p-6 lg:p-8 max-w-6xl mx-auto space-y-6">
+        
+        <!-- Header -->
+        <div class="flex items-center justify-between">
+          <div>
+            <h2 class="text-lg font-bold text-ink-main">PDF Reader & Chapter Analyzer</h2>
+            <p class="text-xs text-ink-secondary">Upload textbooks, syllabi, or case studies to extract summaries and interactive decks</p>
+          </div>
+          <span class="text-xs font-semibold px-3 py-1 rounded-full bg-brand-light text-brand border border-brand/20">
+            Multimodal Document Engine
+          </span>
+        </div>
+
+        <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+          
+          <!-- Upload Box & Chapter List (Left Col) -->
+          <div class="space-y-4">
+            
+            <!-- Drag and Drop Dropzone -->
+            <div id="dropZone" class="border-2 border-dashed border-border-subtle hover:border-brand rounded-3xl p-6 text-center bg-white transition cursor-pointer">
+              <input type="file" id="pdfFileInput" class="hidden" accept=".pdf" onchange="handleFileUpload(event)">
+              <div class="w-12 h-12 rounded-2xl bg-brand-light text-brand flex items-center justify-center mx-auto mb-3">
+                <i data-lucide="upload-cloud" class="w-6 h-6"></i>
+              </div>
+              <p class="text-xs font-bold text-ink-main">Drag and drop syllabus PDF here</p>
+              <p class="text-[11px] text-ink-secondary mt-1">or browse files from your computer</p>
+              <button onclick="document.getElementById('pdfFileInput').click()" class="mt-3 px-4 py-1.5 bg-brand text-white text-xs font-semibold rounded-xl hover:bg-brand-dark transition">
+                Browse Files
+              </button>
+              <p class="text-[10px] text-ink-light mt-3">PDF up to 50 MB supported</p>
+            </div>
+
+            <!-- Uploaded Chapters List -->
+            <div class="bg-white p-5 rounded-3xl border border-border-subtle shadow-card-sm">
+              <h3 class="text-xs font-bold text-ink-main uppercase tracking-wider mb-3">Uploaded Documents</h3>
+              
+              <div class="space-y-2.5" id="documentListContainer">
+                <!-- Document Item 1 (Active) -->
+                <div class="p-3 rounded-2xl bg-brand-light/60 border border-brand/20 flex items-center justify-between cursor-pointer">
+                  <div class="flex items-center gap-2.5 overflow-hidden">
+                    <div class="w-8 h-8 rounded-lg bg-brand text-white flex items-center justify-center flex-shrink-0">
+                      <i data-lucide="file-text" class="w-4 h-4"></i>
+                    </div>
+                    <div class="truncate">
+                      <p class="text-xs font-bold text-ink-main truncate">Porter_Strategy_Ch4.pdf</p>
+                      <p class="text-[10px] text-ink-secondary">28 Pages • Ready</p>
+                    </div>
+                  </div>
+                  <span class="w-2 h-2 rounded-full bg-mint"></span>
+                </div>
+
+                <!-- Document Item 2 -->
+                <div class="p-3 rounded-2xl bg-surface-page border border-border-subtle hover:bg-surface-muted flex items-center justify-between cursor-pointer transition">
+                  <div class="flex items-center gap-2.5 overflow-hidden">
+                    <div class="w-8 h-8 rounded-lg bg-surface-muted text-ink-secondary flex items-center justify-center flex-shrink-0">
+                      <i data-lucide="file-text" class="w-4 h-4"></i>
+                    </div>
+                    <div class="truncate">
+                      <p class="text-xs font-bold text-ink-main truncate">Corporate_Finance_Valuation.pdf</p>
+                      <p class="text-[10px] text-ink-secondary">42 Pages • Ready</p>
+                    </div>
+                  </div>
+                  <span class="w-2 h-2 rounded-full bg-mint"></span>
+                </div>
+              </div>
+
+              <!-- AI Generation Capabilities from Document -->
+              <div class="mt-4 pt-4 border-t border-border-subtle space-y-2">
+                <p class="text-[11px] font-bold text-ink-secondary uppercase">Generate from Active PDF:</p>
+                <div class="grid grid-cols-2 gap-2 text-[11px]">
+                  <button onclick="switchScreen('summary-notes')" class="p-2 rounded-xl bg-surface-page hover:bg-brand-light hover:text-brand text-ink-main border border-border-subtle font-medium transition text-left flex items-center gap-1.5">
+                    <i data-lucide="file-text" class="w-3.5 h-3.5 text-brand"></i> Summary Notes
+                  </button>
+                  <button onclick="switchScreen('quiz')" class="p-2 rounded-xl bg-surface-page hover:bg-brand-light hover:text-brand text-ink-main border border-border-subtle font-medium transition text-left flex items-center gap-1.5">
+                    <i data-lucide="help-circle" class="w-3.5 h-3.5 text-mint"></i> 10-Q Practice Quiz
+                  </button>
+                  <button onclick="switchScreen('flashcards')" class="p-2 rounded-xl bg-surface-page hover:bg-brand-light hover:text-brand text-ink-main border border-border-subtle font-medium transition text-left flex items-center gap-1.5">
+                    <i data-lucide="layers" class="w-3.5 h-3.5 text-amber-warm"></i> Flashcard Deck
+                  </button>
+                  <button onclick="switchScreen('mind-maps')" class="p-2 rounded-xl bg-surface-page hover:bg-brand-light hover:text-brand text-ink-main border border-border-subtle font-medium transition text-left flex items-center gap-1.5">
+                    <i data-lucide="network" class="w-3.5 h-3.5 text-purple-500"></i> Visual Mind Map
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Document Preview & Split-Reader (Right 2 Cols) -->
+          <div class="lg:col-span-2 bg-white rounded-3xl border border-border-subtle shadow-card-sm p-6 flex flex-col justify-between">
+            <div>
+              <div class="flex items-center justify-between pb-4 border-b border-border-subtle">
+                <div class="flex items-center gap-2">
+                  <span class="text-xs font-bold text-ink-main">Document Viewer</span>
+                  <span class="text-xs text-ink-secondary">• Page 4 of 28</span>
+                </div>
+                <div class="flex items-center gap-2 text-xs">
+                  <button class="p-1.5 rounded-lg border border-border-subtle hover:bg-surface-page">
+                    <i data-lucide="zoom-out" class="w-4 h-4"></i>
+                  </button>
+                  <span class="font-medium text-ink-secondary">100%</span>
+                  <button class="p-1.5 rounded-lg border border-border-subtle hover:bg-surface-page">
+                    <i data-lucide="zoom-in" class="w-4 h-4"></i>
+                  </button>
+                </div>
+              </div>
+
+              <!-- Simulated Reader Body -->
+              <div class="mt-6 p-6 bg-surface-page rounded-2xl border border-border-subtle text-xs text-ink-main space-y-4 max-h-96 overflow-y-auto leading-relaxed">
+                <div class="flex items-center justify-between pb-2 border-b border-border-subtle">
+                  <span class="font-bold text-brand uppercase tracking-wider text-[10px]">Chapter 4: The Determinants of Industry Profitability</span>
+                  <span class="text-ink-secondary text-[10px]">Harvard Business Review</span>
+                </div>
+                <h4 class="text-base font-bold text-ink-main">Section 4.2: Supplier Power in Technology Supply Chains</h4>
+                <p>
+                  "When suppliers possess proprietary intellectual property or extreme scale advantages that cannot be replicated economically by customers, they exert substantial pricing pressure. For example, in the semiconductor lithography sphere, ASML maintains near-monopolistic positioning over extreme ultraviolet (EUV) systems, directly restricting downstream pricing latitude for chip foundries..."
+                </p>
+                <div class="p-3 bg-brand-light/70 rounded-xl border border-brand/20">
+                  <p class="font-bold text-brand text-[11px]">✨ Gemini AI Highlight Annotation:</p>
+                  <p class="text-ink-main mt-0.5">
+                    "High supplier power lowers profitability because buyers have no realistic alternatives. This is a recurring theme in midterm Case 4."
+                  </p>
+                </div>
+                <p>
+                  "Conversely, when switching costs are minimal and inputs are commoditized—such as standardized corrugated packaging—suppliers have virtually no leverage over purchasers."
+                </p>
+              </div>
+            </div>
+
+            <!-- Bottom Action Bar -->
+            <div class="mt-6 pt-4 border-t border-border-subtle flex flex-wrap items-center justify-between gap-3">
+              <span class="text-xs text-ink-secondary">Status: Document fully indexed for Gemini Querying</span>
+              <button onclick="quickAskTutor('Summarize Section 4.2 from the uploaded document')" class="px-4 py-2 bg-brand text-white text-xs font-bold rounded-xl hover:bg-brand-dark transition shadow-sm flex items-center gap-2">
+                <i data-lucide="bot" class="w-3.5 h-3.5"></i>
+                <span>Ask AI About This Page</span>
+              </button>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ========================================== -->
+      <!-- SCREEN 6: SUMMARY NOTES                   -->
+      <!-- ========================================== -->
+      <section id="screen-summary-notes" class="hidden p-4 sm:p-6 lg:p-8 max-w-5xl mx-auto space-y-6">
+        <div class="bg-white p-6 sm:p-8 rounded-3xl border border-border-subtle shadow-card-sm">
+          
+          <!-- Note Controls -->
+          <div class="flex flex-wrap items-center justify-between pb-6 border-b border-border-subtle gap-4">
+            <div>
+              <span class="text-[10px] font-bold px-2 py-0.5 rounded-full bg-brand-light text-brand">BBA Revision Notes</span>
+              <h2 class="text-xl font-bold text-ink-main mt-1">Strategic Management — Porter's Five Forces & Case Analysis</h2>
+              <p class="text-xs text-ink-secondary">Generated from Chapter 4 PDF via Gemini AI • Last updated today</p>
+            </div>
+            <div class="flex items-center gap-2 text-xs">
+              <button onclick="alertNotification('Summary notes copied to clipboard!')" class="px-3 py-1.5 rounded-xl border border-border-subtle hover:bg-surface-page text-ink-secondary hover:text-ink-main transition flex items-center gap-1.5 font-semibold">
+                <i data-lucide="copy" class="w-3.5 h-3.5"></i> Copy Notes
+              </button>
+              <button onclick="switchScreen('quiz')" class="px-4 py-1.5 rounded-xl bg-brand text-white font-bold hover:bg-brand-dark transition shadow-purple-glow flex items-center gap-1.5">
+                <i data-lucide="check-circle" class="w-3.5 h-3.5"></i> Generate Quiz from Notes
+              </button>
+            </div>
+          </div>
+
+          <!-- Note Content Body -->
+          <div class="mt-6 space-y-6 text-xs text-ink-main leading-relaxed">
+            
+            <div>
+              <h3 class="text-sm font-bold text-ink-main mb-2">1. Overview of Competitive Strategy</h3>
+              <p class="text-ink-secondary">
+                The objective of strategic management is to achieve sustainable competitive advantage. Industry structure, rather than temporary operational efficiency, is the primary determinant of long-term return on invested capital (ROIC).
+              </p>
+            </div>
+
+            <!-- Key Takeaway Highlight Box -->
+            <div class="p-4 rounded-2xl bg-surface-page border-l-4 border-brand space-y-1">
+              <h4 class="font-bold text-brand text-xs">Core Strategic Principle:</h4>
+              <p class="text-ink-main">
+                "Strategy is not about being the best; it is about being unique. Competing to be the best leads to destructive zero-sum price wars."
+              </p>
+            </div>
+
+            <div>
+              <h3 class="text-sm font-bold text-ink-main mb-2">2. Critical Formula for Market Valuation (DCF Recap)</h3>
+              <div class="p-3 bg-surface-muted rounded-xl font-mono text-[11px] text-ink-main border border-border-subtle">
+                Enterprise Value (EV) = ∑ [ Free Cash Flow_t / (1 + WACC)^t ] + Terminal Value
+              </div>
+              <p class="text-[11px] text-ink-secondary mt-1">
+                Where <strong>WACC</strong> is Weighted Average Cost of Capital, reflecting the required rate of return for debt and equity holders.
+              </p>
+            </div>
+
+            <div>
+              <h3 class="text-sm font-bold text-ink-main mb-2">3. Recommended Case Attack Framework</h3>
+              <ol class="list-decimal pl-5 space-y-1.5 text-ink-secondary">
+                <li><strong class="text-ink-main">Identify the Core Dilemma:</strong> Differentiate between surface symptoms (declining sales) and structural causes (entrant disruption).</li>
+                <li><strong class="text-ink-main">Apply Porter's 5 Forces:</strong> Gauge which specific force is compressing profit margins.</li>
+                <li><strong class="text-ink-main">Formulate Strategic Choices:</strong> Cost Leadership vs. Differentiation vs. Focus Niche.</li>
+                <li><strong class="text-ink-main">Mitigate Implementation Risks:</strong> Financial feasibility and stakeholder alignment.</li>
+              </ol>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ========================================== -->
+      <!-- SCREEN 7: PRACTICE QUIZ (INTERACTIVE)     -->
+      <!-- ========================================== -->
+      <section id="screen-quiz" class="hidden p-4 sm:p-6 lg:p-8 max-w-4xl mx-auto space-y-6">
+        
+        <!-- Quiz Header with Timer & Progress -->
+        <div class="bg-white p-5 rounded-3xl border border-border-subtle shadow-card-sm flex flex-wrap items-center justify-between gap-4">
+          <div>
+            <span class="text-[10px] font-bold px-2 py-0.5 rounded-full bg-brand-light text-brand">Adaptive Active Recall</span>
+            <h2 class="text-base font-bold text-ink-main mt-0.5">Strategic Management & Porter's 5 Forces Drill</h2>
+          </div>
+          
+          <div class="flex items-center gap-4 text-xs font-semibold">
+            <!-- Timer -->
+            <div class="flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-amber-light text-amber-warm font-mono">
+              <i data-lucide="clock" class="w-3.5 h-3.5"></i>
+              <span id="quizTimerDisplay">09:42</span>
+            </div>
+            <!-- Progress Counter -->
+            <span class="text-ink-secondary" id="quizQuestionCounter">Question 1 of 5</span>
+          </div>
+        </div>
+
+        <!-- Progress Bar -->
+        <div class="w-full bg-white p-1 rounded-full border border-border-subtle overflow-hidden">
+          <div id="quizProgressBar" class="bg-brand h-2 rounded-full transition-all duration-300" style="width: 20%"></div>
+        </div>
+
+        <!-- Question Body Card -->
+        <div class="bg-white p-6 sm:p-8 rounded-3xl border border-border-subtle shadow-card-sm space-y-6">
+          <h3 id="quizQuestionText" class="text-base sm:text-lg font-bold text-ink-main leading-snug">
+            Under Michael Porter's Five Forces framework, which condition most significantly increases the Bargaining Power of Suppliers?
+          </h3>
+
+          <!-- Options Container -->
+          <div class="space-y-3" id="quizOptionsContainer">
+            <!-- Rendered by JS -->
+          </div>
+
+          <!-- Bottom Quiz Controls -->
+          <div class="flex items-center justify-between pt-4 border-t border-border-subtle">
+            <button onclick="handleQuizPrev()" id="quizPrevBtn" class="px-4 py-2 rounded-xl border border-border-subtle text-ink-secondary hover:text-ink-main text-xs font-semibold disabled:opacity-40 transition">
+              ← Previous
+            </button>
+            <button onclick="handleQuizNext()" id="quizNextBtn" class="px-6 py-2.5 rounded-xl bg-brand hover:bg-brand-dark text-white text-xs font-bold shadow-purple-glow transition">
+              Next Question →
+            </button>
+          </div>
+        </div>
+      </section>
+
+      <!-- ========================================== -->
+      <!-- SCREEN 8: QUIZ RESULTS                    -->
+      <!-- ========================================== -->
+      <section id="screen-quiz-results" class="hidden p-4 sm:p-6 lg:p-8 max-w-4xl mx-auto space-y-6">
+        <div class="bg-white p-6 sm:p-8 rounded-3xl border border-border-subtle shadow-card-sm text-center">
+          
+          <div class="w-16 h-16 rounded-3xl bg-emerald-50 text-mint flex items-center justify-center mx-auto mb-4 text-2xl">
+            🏆
+          </div>
+
+          <span class="text-xs font-bold text-mint uppercase tracking-wider">Quiz Completed</span>
+          <h2 class="text-2xl sm:text-3xl font-extrabold text-ink-main mt-1">Excellent Performance, Rohon!</h2>
+          <p class="text-xs text-ink-secondary mt-1 max-w-md mx-auto">
+            You scored <strong>4 out of 5</strong> questions correctly (80% accuracy). Your business framework comprehension is strong.
+          </p>
+
+          <!-- Score Breakdown Badges -->
+          <div class="grid grid-cols-3 gap-3 max-w-md mx-auto mt-6 text-xs">
+            <div class="p-3 bg-surface-page rounded-2xl border border-border-subtle">
+              <span class="text-ink-secondary text-[11px]">Score</span>
+              <p class="text-xl font-bold text-brand mt-0.5">80%</p>
+            </div>
+            <div class="p-3 bg-surface-page rounded-2xl border border-border-subtle">
+              <span class="text-ink-secondary text-[11px]">Time Taken</span>
+              <p class="text-xl font-bold text-ink-main mt-0.5">03:18</p>
+            </div>
+            <div class="p-3 bg-surface-page rounded-2xl border border-border-subtle">
+              <span class="text-ink-secondary text-[11px]">Accuracy</span>
+              <p class="text-xl font-bold text-mint mt-0.5">High</p>
+            </div>
+          </div>
+
+          <!-- Question Review Section -->
+          <div class="text-left mt-8 pt-6 border-t border-border-subtle space-y-4">
+            <h4 class="text-xs font-bold text-ink-main uppercase tracking-wider">Detailed Analysis:</h4>
+            
+            <div class="p-4 rounded-2xl bg-emerald-50/60 border border-mint/30 text-xs">
+              <p class="font-bold text-ink-main flex items-center gap-1.5 text-mint">
+                <i data-lucide="check" class="w-4 h-4"></i> Question 1: Supplier Bargaining Power
+              </p>
+              <p class="text-ink-secondary mt-1">
+                Your Answer: <em>High switching costs for buyers and concentrated suppliers.</em> (Correct)
+              </p>
+            </div>
+
+            <div class="p-4 rounded-2xl bg-rose-50/60 border border-rose-200 text-xs">
+              <p class="font-bold text-ink-main flex items-center gap-1.5 text-rose-500">
+                <i data-lucide="x" class="w-4 h-4"></i> Question 3: Threat of Substitutes
+              </p>
+              <p class="text-ink-secondary mt-1">
+                Your Answer: <em>Direct competitors lowering price.</em>
+              </p>
+              <p class="text-ink-main mt-1 font-semibold text-[11px]">
+                💡 Explanation: Direct competitors represent <strong>Industry Rivalry</strong>, not Substitutes. A substitute comes from an alternative product category (e.g., zoom video calls substituting business travel).
+              </p>
+            </div>
+          </div>
+
+          <!-- Actions -->
+          <div class="mt-8 flex flex-wrap items-center justify-center gap-3">
+            <button onclick="restartQuiz()" class="px-5 py-2.5 bg-brand text-white text-xs font-bold rounded-xl hover:bg-brand-dark transition shadow-purple-glow">
+              Retake Quiz
+            </button>
+            <button onclick="switchScreen('dashboard')" class="px-5 py-2.5 bg-surface-page hover:bg-surface-muted text-ink-main text-xs font-semibold rounded-xl border border-border-subtle transition">
+              Back to Dashboard
+            </button>
+          </div>
+        </div>
+      </section>
+
+      <!-- ========================================== -->
+      <!-- SCREEN 9: FLASHCARDS (3D FLIP INTERACTION) -->
+      <!-- ========================================== -->
+      <section id="screen-flashcards" class="hidden p-4 sm:p-6 lg:p-8 max-w-4xl mx-auto space-y-6">
+        <div class="flex items-center justify-between">
+          <div>
+            <h2 class="text-lg font-bold text-ink-main">Flashcard Revision Lab</h2>
+            <p class="text-xs text-ink-secondary">Click the card to reveal the definition and business case example</p>
+          </div>
+          <span class="text-xs font-bold px-3 py-1 rounded-full bg-brand-light text-brand" id="flashcardDeckCounter">
+            Card 1 of 4
+          </span>
+        </div>
+
+        <!-- 3D Card Flip Container -->
+        <div class="w-full max-w-md mx-auto h-80 perspective-1000 cursor-pointer" onclick="toggleCardFlip()">
+          <div id="flashcardElement" class="w-full h-full relative transform-style-3d transition-transform duration-500 rounded-3xl shadow-card-lg">
+            
+            <!-- Front Face -->
+            <div class="absolute inset-0 bg-white border-2 border-border-subtle hover:border-brand rounded-3xl p-8 flex flex-col justify-between backface-hidden transition">
+              <div class="flex items-center justify-between text-xs text-ink-secondary">
+                <span class="font-bold text-brand uppercase tracking-wider text-[10px]">Strategic Concept</span>
+                <span class="flex items-center gap-1 text-[11px]">
+                  <i data-lucide="rotate-3d" class="w-3.5 h-3.5 text-brand"></i> Click to Flip
+                </span>
+              </div>
+              <div class="text-center">
+                <h3 id="cardFrontTerm" class="text-2xl font-extrabold text-ink-main tracking-tight">
+                  Porter's Threat of Substitutes
+                </h3>
+                <p class="text-xs text-ink-secondary mt-2">Core Microeconomic Barrier</p>
+              </div>
+              <div class="text-center text-[10px] text-ink-light font-medium">
+                EduBridge AI Memory Deck • Spaced Repetition Level 2
+              </div>
+            </div>
+
+            <!-- Back Face -->
+            <div class="absolute inset-0 bg-brand-light border-2 border-brand rounded-3xl p-8 flex flex-col justify-between backface-hidden rotate-y-180">
+              <div class="flex items-center justify-between text-xs text-brand font-bold">
+                <span class="uppercase tracking-wider text-[10px]">Definition & Application</span>
+                <span>Explanation</span>
+              </div>
+              <div class="text-left space-y-2">
+                <p id="cardBackDefinition" class="text-xs text-ink-main font-medium leading-relaxed">
+                  The risk that an external product or service outside the traditional industry fulfills the exact same consumer utility.
+                </p>
+                <div class="p-2.5 bg-white rounded-xl text-[11px] text-ink-secondary border border-brand/20">
+                  <strong class="text-brand">Example:</strong> Streaming services (Netflix) substituting movie theaters, or high-speed rail substituting short flights.
+                </div>
+              </div>
+              <div class="text-center text-[10px] text-brand font-bold">
+                Tap anywhere to flip back
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Controls: Known / Needs Revision & Next -->
+        <div class="flex items-center justify-center gap-3 pt-4">
+          <button onclick="markCardNeedsRevision()" class="px-5 py-2.5 rounded-xl bg-amber-light hover:bg-amber-warm text-ink-main font-bold text-xs border border-amber-warm/30 transition flex items-center gap-1.5">
+            <i data-lucide="rotate-ccw" class="w-3.5 h-3.5"></i> Needs Revision
+          </button>
+          <button onclick="markCardKnown()" class="px-5 py-2.5 rounded-xl bg-emerald-50 hover:bg-mint hover:text-white text-mint font-bold text-xs border border-emerald-200 transition flex items-center gap-1.5">
+            <i data-lucide="check" class="w-3.5 h-3.5"></i> Got It (Known)
+          </button>
+          <button onclick="nextFlashcard()" class="px-5 py-2.5 rounded-xl bg-brand text-white font-bold text-xs hover:bg-brand-dark transition shadow-purple-glow flex items-center gap-1.5">
+            <span>Next Card</span>
+            <i data-lucide="arrow-right" class="w-3.5 h-3.5"></i>
+          </button>
+        </div>
+      </section>
+
+      <!-- ========================================== -->
+      <!-- SCREEN 10: MIND MAPS (VISUAL CONCEPT TREE) -->
+      <!-- ========================================== -->
+      <section id="screen-mind-maps" class="hidden p-4 sm:p-6 lg:p-8 max-w-6xl mx-auto space-y-6">
+        <div class="flex items-center justify-between">
+          <div>
+            <h2 class="text-lg font-bold text-ink-main">Interactive Concept Mind Map</h2>
+            <p class="text-xs text-ink-secondary">Explore hierarchical links between strategy theories and marketing concepts</p>
+          </div>
+          <div class="flex gap-2">
+            <button onclick="alertNotification('Mind Map zoom reset to default')" class="px-3 py-1.5 bg-white border border-border-subtle rounded-xl text-xs font-semibold text-ink-secondary hover:text-ink-main">
+              Reset Zoom
+            </button>
+          </div>
+        </div>
+
+        <!-- Mind Map Canvas Card -->
+        <div class="bg-white rounded-3xl border border-border-subtle shadow-card-sm p-8 min-h-[440px] flex items-center justify-center relative overflow-hidden">
+          
+          <!-- Central Root Node -->
+          <div class="text-center space-y-8 w-full max-w-2xl">
+            <div class="inline-block px-6 py-3.5 rounded-2xl bg-brand text-white font-extrabold text-sm shadow-purple-glow ring-4 ring-brand-light cursor-pointer hover:scale-105 transition">
+              🎯 Business Strategic Analysis
+            </div>
+
+            <!-- Connecting Branch Level 1 -->
+            <div class="grid grid-cols-1 sm:grid-cols-3 gap-6 pt-4 relative">
+              
+              <!-- Branch 1: Porter 5 Forces -->
+              <div onclick="showMindMapDetail('External Environment', 'Analyzes industry profitability and competitive pressure outside the firm.')" class="p-4 rounded-2xl bg-brand-light border border-brand/20 cursor-pointer hover:shadow-card-md hover:border-brand transition text-left">
+                <span class="text-[10px] font-bold text-brand uppercase">Branch A</span>
+                <h4 class="text-xs font-bold text-ink-main mt-0.5">Porter's 5 Forces</h4>
+                <p class="text-[11px] text-ink-secondary mt-1">Suppliers, Buyers, Substitutes, New Entrants, Rivalry</p>
+              </div>
+
+              <!-- Branch 2: Resource-Based View -->
+              <div onclick="showMindMapDetail('Internal Competencies', 'VRIO framework assessing if resources are Valuable, Rare, Inimitable, and Organized.')" class="p-4 rounded-2xl bg-emerald-50 border border-mint/20 cursor-pointer hover:shadow-card-md hover:border-mint transition text-left">
+                <span class="text-[10px] font-bold text-mint uppercase">Branch B</span>
+                <h4 class="text-xs font-bold text-ink-main mt-0.5">VRIO Framework</h4>
+                <p class="text-[11px] text-ink-secondary mt-1">Core Competencies & Internal Capabilities</p>
+              </div>
+
+              <!-- Branch 3: Marketing 4Ps -->
+              <div onclick="showMindMapDetail('Go-To-Market Execution', 'Aligning product positioning, dynamic pricing, distribution, and promotion.')" class="p-4 rounded-2xl bg-amber-light border border-amber-warm/30 cursor-pointer hover:shadow-card-md hover:border-amber-warm transition text-left">
+                <span class="text-[10px] font-bold text-amber-warm uppercase">Branch C</span>
+                <h4 class="text-xs font-bold text-ink-main mt-0.5">Marketing 4Ps</h4>
+                <p class="text-[11px] text-ink-secondary mt-1">Product, Price, Place, Promotion</p>
+              </div>
+            </div>
+          </div>
+
+          <!-- Bottom Drawer Preview for Selected Node -->
+          <div id="mindMapDetailDrawer" class="absolute bottom-4 left-4 right-4 bg-white/95 backdrop-blur-md p-4 rounded-2xl border border-border-subtle shadow-card-lg hidden flex items-center justify-between">
+            <div>
+              <span id="mindMapDetailTitle" class="text-xs font-bold text-brand">Node Details</span>
+              <p id="mindMapDetailDesc" class="text-xs text-ink-secondary mt-0.5">Click any branch to inspect strategic connections.</p>
+            </div>
+            <button onclick="document.getElementById('mindMapDetailDrawer').classList.add('hidden')" class="p-1 rounded-lg text-ink-secondary hover:bg-surface-page">
+              <i data-lucide="x" class="w-4 h-4"></i>
+            </button>
+          </div>
+        </div>
+      </section>
+
+      <!-- ========================================== -->
+      <!-- SCREEN 11: LANGUAGE TUTOR (10 INDIC)       -->
+      <!-- ========================================== -->
+      <section id="screen-language-tutor" class="hidden p-4 sm:p-6 lg:p-8 max-w-6xl mx-auto space-y-6">
+        <div class="flex flex-wrap items-center justify-between gap-4">
+          <div>
+            <h2 class="text-lg font-bold text-ink-main">Regional Indic Language Tutor</h2>
+            <p class="text-xs text-ink-secondary">Learn key business administration terminology in 10 major Indian languages</p>
+          </div>
+          <span class="text-xs font-semibold px-3 py-1 rounded-full bg-emerald-50 text-mint border border-emerald-200">
+            10 Regional Dialects Active
+          </span>
+        </div>
+
+        <!-- Language Selection Grid (10 Requested Languages) -->
+        <div class="grid grid-cols-2 sm:grid-cols-5 gap-3" id="languageGridContainer">
+          <!-- Populated by JS for: Hindi, Bengali, Tamil, Telugu, Kannada, Malayalam, Marathi, Gujarati, Punjabi, Odia -->
+        </div>
+
+        <!-- Active Language Workspace -->
+        <div class="bg-white p-6 sm:p-8 rounded-3xl border border-border-subtle shadow-card-sm space-y-6">
+          <div class="flex items-center justify-between border-b border-border-subtle pb-4">
+            <div>
+              <span class="text-[10px] font-bold px-2 py-0.5 rounded-full bg-brand-light text-brand" id="activeLangLevel">Beginner Level</span>
+              <h3 class="text-xl font-bold text-ink-main mt-1" id="activeLangTitle">Bengali (বাংলা) — Business Administration Vocabulary</h3>
+            </div>
+            <div class="flex gap-2">
+              <button class="px-3 py-1.5 rounded-xl bg-surface-page border border-border-subtle text-xs font-semibold text-ink-secondary">
+                Vocabulary List
+              </button>
+              <button class="px-3 py-1.5 rounded-xl bg-brand text-white text-xs font-bold shadow-sm">
+                Practice Dialogues
+              </button>
+            </div>
+          </div>
+
+          <!-- Vocabulary Practice Cards -->
+          <div class="grid grid-cols-1 sm:grid-cols-3 gap-4 text-xs">
+            <div class="p-4 rounded-2xl bg-surface-page border border-border-subtle space-y-1">
+              <span class="text-[10px] font-bold text-brand uppercase">Term 1: Strategy</span>
+              <p class="text-base font-bold text-ink-main">কৌশল (Koushol)</p>
+              <p class="text-ink-secondary text-[11px]">Usage: ব্যবসা কৌশল (Business Strategy)</p>
+            </div>
+            <div class="p-4 rounded-2xl bg-surface-page border border-border-subtle space-y-1">
+              <span class="text-[10px] font-bold text-brand uppercase">Term 2: Market</span>
+              <p class="text-base font-bold text-ink-main">বাজার (Bazaar)</p>
+              <p class="text-ink-secondary text-[11px]">Usage: প্রতিযোগিতামূলক বাজার (Competitive Market)</p>
+            </div>
+            <div class="p-4 rounded-2xl bg-surface-page border border-border-subtle space-y-1">
+              <span class="text-[10px] font-bold text-brand uppercase">Term 3: Profitability</span>
+              <p class="text-base font-bold text-ink-main">লাভজনকতা (Labhjanakata)</p>
+              <p class="text-ink-secondary text-[11px]">Usage: দীর্ঘমেয়াদী লাভজনকতা (Long-term Profitability)</p>
+            </div>
+          </div>
+
+          <!-- Simulated Pronunciation / Audio Interface Disclaimer -->
+          <div class="p-4 rounded-2xl bg-brand-light/60 border border-brand/20 flex items-center justify-between text-xs">
+            <div class="flex items-center gap-3">
+              <div class="w-8 h-8 rounded-lg bg-brand text-white flex items-center justify-center">
+                <i data-lucide="volume-2" class="w-4 h-4"></i>
+              </div>
+              <div>
+                <p class="font-bold text-ink-main">Interactive Audio Pronunciation</p>
+                <p class="text-[11px] text-ink-secondary">Demonstration preview • Full Gemini Live TTS integration ready in Phase 2</p>
+              </div>
+            </div>
+            <button onclick="alertNotification('Playing simulated native pronunciation sample...')" class="px-3 py-1.5 bg-white text-brand rounded-xl font-bold border border-brand/20 hover:bg-brand hover:text-white transition">
+              Listen (Simulated)
+            </button>
+          </div>
+        </div>
+      </section>
+
+      <!-- ========================================== -->
+      <!-- SCREEN 12: STUDY PLANNER                   -->
+      <!-- ========================================== -->
+      <section id="screen-planner" class="hidden p-4 sm:p-6 lg:p-8 max-w-6xl mx-auto space-y-6">
+        <div class="flex items-center justify-between">
+          <div>
+            <h2 class="text-lg font-bold text-ink-main">Intelligent Study Planner</h2>
+            <p class="text-xs text-ink-secondary">Automated schedules synchronized with your midterm exam dates</p>
+          </div>
+          <button onclick="alertNotification('Study Planner is a UI demo. Session creation and saving are not connected yet.')" class="px-4 py-2 bg-brand text-white text-xs font-bold rounded-xl shadow-purple-glow">
+            + Schedule Session
+          </button>
+        </div>
+
+        <div class="bg-white p-6 rounded-3xl border border-border-subtle shadow-card-sm space-y-4">
+          <div class="flex items-center justify-between font-bold text-xs pb-3 border-b border-border-subtle">
+            <span>October 2026 — Week 3</span>
+            <div class="flex gap-2">
+              <button class="p-1.5 rounded-lg border border-border-subtle">←</button>
+              <button class="p-1.5 rounded-lg border border-border-subtle">→</button>
+            </div>
+          </div>
+
+          <!-- Calendar Days Grid -->
+          <div class="grid grid-cols-7 gap-2 text-center text-xs">
+            <div class="p-2 font-bold text-ink-secondary">Mon</div>
+            <div class="p-2 font-bold text-ink-secondary">Tue</div>
+            <div class="p-2 font-bold text-ink-secondary">Wed</div>
+            <div class="p-2 font-bold text-ink-secondary">Thu</div>
+            <div class="p-2 font-bold text-ink-secondary">Fri</div>
+            <div class="p-2 font-bold text-brand bg-brand-light rounded-xl">Today</div>
+            <div class="p-2 font-bold text-ink-secondary">Sun</div>
+
+            <!-- Calendar Cells -->
+            <div class="h-28 p-2 rounded-xl bg-surface-page border border-border-subtle text-left space-y-1">
+              <span class="font-bold text-[10px]">12</span>
+              <div class="p-1 rounded bg-brand-light text-brand text-[9px] font-semibold truncate">Finance DCF</div>
+            </div>
+            <div class="h-28 p-2 rounded-xl bg-surface-page border border-border-subtle text-left space-y-1">
+              <span class="font-bold text-[10px]">13</span>
+              <div class="p-1 rounded bg-emerald-50 text-mint text-[9px] font-semibold truncate">Marketing 4Ps</div>
+            </div>
+            <div class="h-28 p-2 rounded-xl bg-surface-page border border-border-subtle text-left space-y-1">
+              <span class="font-bold text-[10px]">14</span>
+              <div class="p-1 rounded bg-amber-light text-amber-warm text-[9px] font-semibold truncate">Porter Quiz</div>
+            </div>
+            <div class="h-28 p-2 rounded-xl bg-surface-page border border-border-subtle text-left space-y-1">
+              <span class="font-bold text-[10px]">15</span>
+              <div class="p-1 rounded bg-purple-50 text-purple-600 text-[9px] font-semibold truncate">Case Review</div>
+            </div>
+            <div class="h-28 p-2 rounded-xl bg-surface-page border border-border-subtle text-left space-y-1">
+              <span class="font-bold text-[10px]">16</span>
+              <div class="p-1 rounded bg-brand-light text-brand text-[9px] font-semibold truncate">Bengali Prep</div>
+            </div>
+            <!-- Today Active Cell -->
+            <div class="h-28 p-2 rounded-xl bg-brand-light/50 border-2 border-brand text-left space-y-1">
+              <span class="font-bold text-[10px] text-brand">17 ★</span>
+              <div class="p-1 rounded bg-brand text-white text-[9px] font-bold truncate">Midterm Simulation</div>
+              <div class="p-1 rounded bg-white text-ink-secondary text-[9px] truncate">Flashcards (30m)</div>
+            </div>
+            <div class="h-28 p-2 rounded-xl bg-surface-page border border-border-subtle text-left space-y-1">
+              <span class="font-bold text-[10px]">18</span>
+              <div class="p-1 rounded bg-surface-muted text-ink-secondary text-[9px] truncate">Rest / Catchup</div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ========================================== -->
+      <!-- SCREEN 13: EXAM SIMULATOR                 -->
+      <!-- ========================================== -->
+      <section id="screen-exam-simulator" class="hidden p-4 sm:p-6 lg:p-8 max-w-4xl mx-auto space-y-6">
+        <div class="bg-white p-6 sm:p-8 rounded-3xl border border-border-subtle shadow-card-sm space-y-6">
+          <div class="flex items-center gap-3">
+            <div class="w-10 h-10 rounded-xl bg-rose-50 text-rose-500 flex items-center justify-center">
+              <i data-lucide="timer" class="w-5 h-5"></i>
+            </div>
+            <div>
+              <h2 class="text-lg font-bold text-ink-main">BBA Semester Exam Simulator</h2>
+              <p class="text-xs text-ink-secondary">Strictly timed examination conditions with authentic university rubrics</p>
+            </div>
+          </div>
+
+          <div class="grid grid-cols-1 sm:grid-cols-3 gap-4 text-xs">
+            <div class="p-4 rounded-2xl bg-surface-page border border-border-subtle">
+              <span class="text-ink-secondary">Course</span>
+              <p class="font-bold text-ink-main mt-1">BUS-301: Strategic Management</p>
+            </div>
+            <div class="p-4 rounded-2xl bg-surface-page border border-border-subtle">
+              <span class="text-ink-secondary">Duration</span>
+              <p class="font-bold text-ink-main mt-1">45 Minutes (Timed)</p>
+            </div>
+            <div class="p-4 rounded-2xl bg-surface-page border border-border-subtle">
+              <span class="text-ink-secondary">Format</span>
+              <p class="font-bold text-ink-main mt-1">15 Multiple Choice + 1 Case Essay</p>
+            </div>
+          </div>
+
+          <div class="p-4 rounded-2xl bg-amber-light border border-amber-warm/30 text-xs">
+            <h4 class="font-bold text-ink-main mb-1">⚠️ Examination Instructions:</h4>
+            <ul class="list-disc pl-5 space-y-1 text-ink-secondary">
+              <li>Full screen mode will be requested upon start.</li>
+              <li>Calculators and formula sheet are built into the simulator interface.</li>
+              <li>Gemini AI will score the analytical essay against standard AACSB business rubrics.</li>
+            </ul>
+          </div>
+
+          <div class="flex items-center justify-between pt-4 border-t border-border-subtle">
+            <span class="text-xs text-ink-secondary">Estimated completion: 45 min</span>
+            <button onclick="switchScreen('quiz')" class="px-6 py-2.5 rounded-xl bg-rose-500 hover:bg-rose-600 text-white font-bold text-xs shadow-sm transition">
+              Begin Timed Exam Now →
+            </button>
+          </div>
+        </div>
+      </section>
+
+      <!-- ========================================== -->
+      <!-- SCREEN 14: PROGRESS & ACHIEVEMENTS        -->
+      <!-- ========================================== -->
+      <section id="screen-progress" class="hidden p-4 sm:p-6 lg:p-8 max-w-6xl mx-auto space-y-6">
+        <div>
+          <h2 class="text-lg font-bold text-ink-main">Progress, Badges & Academic Honors</h2>
+          <p class="text-xs text-ink-secondary">Your cumulative learning stats and verified academic milestones</p>
+        </div>
+
+        <!-- Badges Grid -->
+        <div class="grid grid-cols-2 sm:grid-cols-4 gap-4">
+          <div class="bg-white p-5 rounded-3xl border border-border-subtle text-center shadow-card-sm">
+            <div class="w-12 h-12 rounded-2xl bg-amber-light text-amber-warm flex items-center justify-center mx-auto mb-2 text-2xl">
+              🔥
+            </div>
+            <h4 class="text-xs font-bold text-ink-main">14-Day Streak</h4>
+            <p class="text-[10px] text-ink-secondary mt-0.5">Consistent Daily Learner</p>
+            <span class="inline-block mt-2 px-2 py-0.5 rounded-full bg-emerald-50 text-mint text-[9px] font-bold">Unlocked</span>
+          </div>
+
+          <div class="bg-white p-5 rounded-3xl border border-border-subtle text-center shadow-card-sm">
+            <div class="w-12 h-12 rounded-2xl bg-brand-light text-brand flex items-center justify-center mx-auto mb-2 text-2xl">
+              🎯
+            </div>
+            <h4 class="text-xs font-bold text-ink-main">Strategy Master</h4>
+            <p class="text-[10px] text-ink-secondary mt-0.5">Top 5% Quiz Accuracy</p>
+            <span class="inline-block mt-2 px-2 py-0.5 rounded-full bg-emerald-50 text-mint text-[9px] font-bold">Unlocked</span>
+          </div>
+
+          <div class="bg-white p-5 rounded-3xl border border-border-subtle text-center shadow-card-sm">
+            <div class="w-12 h-12 rounded-2xl bg-purple-50 text-purple-600 flex items-center justify-center mx-auto mb-2 text-2xl">
+              🧠
+            </div>
+            <h4 class="text-xs font-bold text-ink-main">Socratic Sparrer</h4>
+            <p class="text-[10px] text-ink-secondary mt-0.5">50+ AI Tutor Inquiries</p>
+            <span class="inline-block mt-2 px-2 py-0.5 rounded-full bg-emerald-50 text-mint text-[9px] font-bold">Unlocked</span>
+          </div>
+
+          <div class="bg-white p-5 rounded-3xl border border-border-subtle text-center shadow-card-sm opacity-60">
+            <div class="w-12 h-12 rounded-2xl bg-surface-muted text-ink-secondary flex items-center justify-center mx-auto mb-2 text-2xl">
+              🏆
+            </div>
+            <h4 class="text-xs font-bold text-ink-main">Ambassador Honors</h4>
+            <p class="text-[10px] text-ink-secondary mt-0.5">Complete All Midterm Simulations</p>
+            <span class="inline-block mt-2 px-2 py-0.5 rounded-full bg-surface-muted text-ink-secondary text-[9px] font-bold">In Progress (80%)</span>
+          </div>
+        </div>
+
+        <!-- Subject Breakdown -->
+        <div class="bg-white p-6 rounded-3xl border border-border-subtle shadow-card-sm space-y-4">
+          <h3 class="text-sm font-bold text-ink-main">Subject Mastery Breakdown</h3>
+          <div class="space-y-3 text-xs">
+            <div>
+              <div class="flex justify-between mb-1 font-semibold">
+                <span>Strategic Management (BBA)</span>
+                <span class="text-brand">92% Mastery</span>
+              </div>
+              <div class="w-full bg-surface-page rounded-full h-2">
+                <div class="bg-brand h-full rounded-full" style="width: 92%"></div>
+              </div>
+            </div>
+            <div>
+              <div class="flex justify-between mb-1 font-semibold">
+                <span>Managerial Economics</span>
+                <span class="text-mint">86% Mastery</span>
+              </div>
+              <div class="w-full bg-surface-page rounded-full h-2">
+                <div class="bg-mint h-full rounded-full" style="width: 86%"></div>
+              </div>
+            </div>
+            <div>
+              <div class="flex justify-between mb-1 font-semibold">
+                <span>Corporate Finance & Valuation</span>
+                <span class="text-amber-warm">74% Mastery</span>
+              </div>
+              <div class="w-full bg-surface-page rounded-full h-2">
+                <div class="bg-amber-warm h-full rounded-full" style="width: 74%"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ========================================== -->
+      <!-- SCREEN 15: SETTINGS & STUDENT PROFILE     -->
+      <!-- ========================================== -->
+      <section id="screen-settings" class="hidden p-4 sm:p-6 lg:p-8 max-w-4xl mx-auto space-y-6">
+        <div class="bg-white p-6 sm:p-8 rounded-3xl border border-border-subtle shadow-card-sm space-y-6">
+          <div class="flex items-center gap-4 pb-6 border-b border-border-subtle">
+            <div class="w-16 h-16 rounded-2xl bg-brand text-white flex items-center justify-center font-bold text-xl shadow-purple-glow">
+              AM
+            </div>
+            <div>
+              <h2 class="text-lg font-bold text-ink-main">Rohon Das</h2>
+              <p class="text-xs text-ink-secondary">BBA Undergraduate • Google for Education Ambassador Candidate</p>
+              <span class="inline-block mt-1 text-[10px] font-bold px-2 py-0.5 rounded bg-brand-light text-brand">Honor Roll</span>
+            </div>
+          </div>
+
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 text-xs">
+            <div>
+              <label class="font-bold text-ink-secondary uppercase text-[10px]">Primary Institution</label>
+              <input type="text" value="School of Business Administration" class="w-full mt-1 px-3 py-2 bg-surface-page border border-border-subtle rounded-xl text-ink-main" disabled>
+            </div>
+            <div>
+              <label class="font-bold text-ink-secondary uppercase text-[10px]">Preferred Regional Language</label>
+              <select class="w-full mt-1 px-3 py-2 bg-surface-page border border-border-subtle rounded-xl text-ink-main">
+                <option>Bengali (বাংলা)</option>
+                <option>Hindi (हिन्दी)</option>
+                <option>Tamil (தமிழ்)</option>
+                <option>English (Academic)</option>
+              </select>
+            </div>
+            <div>
+              <label class="font-bold text-ink-secondary uppercase text-[10px]">Daily Study Target</label>
+              <select class="w-full mt-1 px-3 py-2 bg-surface-page border border-border-subtle rounded-xl text-ink-main">
+                <option>4 Hours / Day (Midterm Sprint)</option>
+                <option>2 Hours / Day (Regular Pace)</option>
+              </select>
+            </div>
+            <div>
+              <label class="font-bold text-ink-secondary uppercase text-[10px]">Google Gemini Model Preference</label>
+              <select class="w-full mt-1 px-3 py-2 bg-surface-page border border-border-subtle rounded-xl text-ink-main">
+                <option>Gemini 3.0 Flash (Fast Reasoning)</option>
+                <option>Gemini 1.5 Pro (Deep Research)</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="pt-4 border-t border-border-subtle flex justify-end">
+            <button onclick="alertNotification('Settings preferences saved locally!')" class="px-5 py-2.5 bg-brand text-white text-xs font-bold rounded-xl hover:bg-brand-dark transition shadow-purple-glow">
+              Save Preferences
+            </button>
+          </div>
+        </div>
+      </section>
+
+    </main>
+  </div>
+
+  <div id="toastNotification" class="fixed bottom-6 right-6 z-50 bg-ink-main text-white px-4 py-3 rounded-2xl shadow-card-lg text-xs font-semibold hidden flex items-center gap-2 transition-all">
+    <i data-lucide="check-circle" class="w-4 h-4 text-mint"></i>
+    <span id="toastMessage">Action completed successfully</span>
+  </div>
+
+  <script>
+    // State Variables
+    let currentScreen = 'dashboard';
+    let cardFlipped = false;
+    let currentCardIndex = 0;
+    let currentQuizIndex = 0;
+    let quizSelectedAnswers = {};
+    let activeLanguage = 'bengali';
+
+    // Flashcard Data
+    const flashcardsData = [
+      {
+        term: "Porter's Threat of Substitutes",
+        tag: "External Microeconomic Force",
+        definition: "The risk that alternative products fulfilling the exact same functional customer utility will displace the industry.",
+        example: "Streaming subscriptions (Netflix) substituting movie theaters, or videoconferencing substituting business travel flights."
+      },
+      {
+        term: "VRIO Resource Analysis",
+        tag: "Internal Competency Framework",
+        definition: "A framework assessing whether a firm's internal resources are Valuable, Rare, Inimitable, and Organized for value capture.",
+        example: "Google's proprietary search algorithms and planetary-scale server infrastructure represent high Inimitability."
+      },
+      {
+        term: "Weighted Average Cost of Capital (WACC)",
+        tag: "Corporate Finance",
+        definition: "The average expected after-tax rate of return required by all capital providers (both debt and equity holders).",
+        example: "Used as the hurdle rate to discount future free cash flows in valuation models."
+      },
+      {
+        term: "First-Mover Advantage vs. Fast Follower",
+        tag: "Strategic Market Entry",
+        definition: "The competitive edge gained by early market entry vs. the efficiency of second movers who avoid initial R&D expenditure.",
+        example: "Apple was rarely the first mover in MP3 players or tablets, but won as a fast follower with superior product design."
+      }
+    ];
+
+    // Quiz Questions Data (5 Interactive Questions)
+    const quizData = [
+      {
+        q: "Under Michael Porter's Five Forces framework, which condition most significantly increases the Bargaining Power of Suppliers?",
+        options: [
+          "Suppliers face high switching costs to change buyers",
+          "The supplier industry is heavily concentrated with proprietary technology",
+          "Buyers purchase in extremely large commercial volumes",
+          "Standardized commodity raw materials are readily accessible"
+        ],
+        correct: 1,
+        explanation: "Supplier power is maximized when suppliers are few in number, offer unique inputs, and buyers face steep switching penalties."
+      },
+      {
+        q: "In business case analysis, how does a 'Substitute' fundamentally differ from a 'Direct Competitor'?",
+        options: [
+          "A substitute is always cheaper than incumbent products",
+          "A substitute originates from an entirely different industry but satisfies the same utility",
+          "Substitutes only occur in digital or software-driven markets",
+          "There is no practical difference between the two terms"
+        ],
+        correct: 1,
+        explanation: "Substitutes fulfill identical customer jobs-to-be-done from outside the established industry boundary."
+      },
+      {
+        q: "Which strategic priority is emphasized by Porter over 'Operational Effectiveness'?",
+        options: [
+          "Price discounting to drive maximum market share",
+          "Benchmarking competitors and copying best practices",
+          "Unique strategic positioning that creates a sustainable defensible moat",
+          "Outsourcing all production to lower direct operational costs"
+        ],
+        correct: 2,
+        explanation: "Operational effectiveness is necessary but easily copied; true strategy is choosing to perform activities differently."
+      },
+      {
+        q: "When calculating Free Cash Flow to Firm (FCFF), which item is added back to Net Operating Profit After Tax (NOPAT)?",
+        options: [
+          "Capital Expenditures (CapEx)",
+          "Depreciation and Amortization (Non-cash charges)",
+          "Net Working Capital additions",
+          "Dividend payouts to common shareholders"
+        ],
+        correct: 1,
+        explanation: "Depreciation is a non-cash expense deducted from accounting profits, so it must be added back to compute true cash."
+      },
+      {
+        q: "In the VRIO framework, what outcome occurs if a company has a resource that is Valuable and Rare, but easily Imitated?",
+        options: [
+          "Sustained Competitive Advantage",
+          "Competitive Disadvantage",
+          "Temporary Competitive Advantage",
+          "Competitive Parity"
+        ],
+        correct: 2,
+        explanation: "Without barriers to imitation, rivals replicate the advantage quickly, making the surplus temporary."
+      }
+    ];
+
+    // Regional Indic Languages List
+    const indicLanguages = [
+      { id: 'hindi', name: 'Hindi', script: 'हिन्दी', level: 'Intermediate' },
+      { id: 'bengali', name: 'Bengali', script: 'বাংলা', level: 'Beginner' },
+      { id: 'tamil', name: 'Tamil', script: 'தமிழ்', level: 'Beginner' },
+      { id: 'telugu', name: 'Telugu', script: 'తెలుగు', level: 'Beginner' },
+      { id: 'kannada', name: 'Kannada', script: 'ಕನ್ನಡ', level: 'Beginner' },
+      { id: 'malayalam', name: 'Malayalam', script: 'മലയാളം', level: 'Beginner' },
+      { id: 'marathi', name: 'Marathi', script: 'मराठी', level: 'Intermediate' },
+      { id: 'gujarati', name: 'Gujarati', script: 'ગુજરાતી', level: 'Beginner' },
+      { id: 'punjabi', name: 'Punjabi', script: 'ਪੰਜਾਬੀ', level: 'Beginner' },
+      { id: 'odia', name: 'Odia', script: 'ଓଡ଼ିଆ', level: 'Beginner' },
+    ];
+
+    // ==========================================
+    // SCREEN NAVIGATION ROUTER
+    // ==========================================
+    function switchScreen(screenId) {
+      // Hide all screens
+      const screens = document.querySelectorAll('main > section');
+      screens.forEach(s => s.classList.add('hidden'));
+
+      // Show selected screen
+      const target = document.getElementById(`screen-${screenId}`);
+      if (target) {
+        target.classList.remove('hidden');
+        currentScreen = screenId;
+      }
+
+      // Update active navigation state
+      document.querySelectorAll('#sidebar button').forEach(btn => {
+        btn.classList.remove('nav-item-active');
+      });
+      const activeNavBtn = document.getElementById(`nav-${screenId}`);
+      if (activeNavBtn) {
+        activeNavBtn.classList.add('nav-item-active');
+      }
+
+      // Close mobile drawer if open
+      document.getElementById('mobileDrawer').classList.add('hidden');
+
+      // Scroll viewport to top
+      document.querySelector('main').scrollTo({ top: 0, behavior: 'smooth' });
+
+      // Trigger re-initialization if quiz or flashcards
+      if (screenId === 'quiz') renderQuizQuestion();
+      if (screenId === 'flashcards') renderFlashcard();
+      if (screenId === 'language-tutor') renderLanguageGrid();
+
+      // Refresh icons
+      lucide.createIcons();
+    }
+
+    // ==========================================
+    // AI TUTOR CONVERSATIONAL LOGIC (DEMO SIMULATION)
+    // ==========================================
+    function handleTutorSend() {
+      const input = document.getElementById('tutorInput');
+      const text = input.value.trim();
+      if (!text) return;
+
+      appendTutorUserMessage(text);
+      input.value = '';
+
+      // Simulate a sample Socratic response (no live Gemini API call)
+      showTutorTypingIndicator();
+      setTimeout(() => {
+        removeTutorTypingIndicator();
+        generateSocraticResponse(text);
+      }, 950);
+    }
+
+    function sendQuickPrompt(promptText) {
+      document.getElementById('tutorInput').value = promptText;
+      handleTutorSend();
+    }
+
+    function quickAskTutor(query) {
+      switchScreen('ai-tutor');
+      setTimeout(() => {
+        sendQuickPrompt(query);
+      }, 300);
+    }
+
+    function appendTutorUserMessage(text) {
+      const container = document.getElementById('tutorChatContainer');
+      const msg = document.createElement('div');
+      msg.className = "flex items-start gap-3 max-w-2xl ml-auto flex-row-reverse";
+      msg.innerHTML = `
+        <div class="w-8 h-8 rounded-lg bg-ink-main text-white flex items-center justify-center flex-shrink-0 font-bold text-xs">
+          AM
+        </div>
+        <div class="bg-brand text-white p-4 rounded-2xl rounded-tr-none text-xs leading-relaxed shadow-sm">
+          <p>${escapeHtml(text)}</p>
+        </div>
+      `;
+      container.appendChild(msg);
+      container.scrollTop = container.scrollHeight;
+    }
+
+    function showTutorTypingIndicator() {
+      const container = document.getElementById('tutorChatContainer');
+      const indicator = document.createElement('div');
+      indicator.id = 'tutorTypingIndicator';
+      indicator.className = "flex items-start gap-3 max-w-2xl";
+      indicator.innerHTML = `
+        <div class="w-8 h-8 rounded-lg bg-brand-light text-brand flex items-center justify-center flex-shrink-0 font-bold text-xs">
+          AI
+        </div>
+        <div class="bg-surface-page p-3 rounded-2xl rounded-tl-none border border-border-subtle text-xs text-ink-secondary flex items-center gap-2">
+          <span class="w-2 h-2 rounded-full bg-brand animate-bounce"></span>
+          <span class="w-2 h-2 rounded-full bg-brand animate-bounce" style="animation-delay: 0.15s"></span>
+          <span class="w-2 h-2 rounded-full bg-brand animate-bounce" style="animation-delay: 0.3s"></span>
+          <span class="text-[11px]">Gemini Socratic Engine analyzing reasoning...</span>
+        </div>
+      `;
+      container.appendChild(indicator);
+      container.scrollTop = container.scrollHeight;
+    }
+
+    function removeTutorTypingIndicator() {
+      const el = document.getElementById('tutorTypingIndicator');
+      if (el) el.remove();
+    }
+
+    function generateSocraticResponse(userText) {
+      const container = document.getElementById('tutorChatContainer');
+      let responseHtml = "";
+
+      const lower = userText.toLowerCase();
+      if (lower.includes('supplier') || lower.includes('netflix')) {
+        responseHtml = `
+          <p class="font-bold text-brand mb-1">Excellent inquiry regarding Supplier Power in Digital Media:</p>
+          <p>When Netflix began, they relied almost completely on licensed catalogs from Disney, Sony, and Warner. Notice what happened next: those suppliers noticed Netflix's margins and launched their own streaming services (Disney+, HBO Max).</p>
+          <div class="mt-2 p-2.5 bg-brand-light/70 rounded-xl border border-brand/20">
+            <strong>Socratic Question for you, Rohon:</strong> How did Netflix's pivot to <em>Original Content</em> fundamentally neutralize the Bargaining Power of those Hollywood suppliers?
+          </div>
+        `;
+      } else if (lower.includes('test') || lower.includes('question')) {
+        responseHtml = `
+          <p class="font-bold text-brand mb-1">Let's test your strategic judgment on an exam scenario:</p>
+          <p>Imagine you are consulting for a regional supermarket chain facing an entry from Amazon Fresh. Switching costs for shoppers are near zero.</p>
+          <p class="mt-2 text-ink-main font-semibold">Which of Porter's 3 Generic Strategies would you recommend: Low Cost Leadership, High Differentiation, or Hyper-Local Niche Focus? Explain your rationale.</p>
+        `;
+      } else {
+        responseHtml = `
+          <p class="font-bold text-brand mb-1">Analytical Breakdown:</p>
+          <p>Analyzing: "<em>${escapeHtml(userText)}</em>". In business administration, we must always separate operational tactics from sustainable strategic advantage.</p>
+          <p class="mt-2">To anchor this in your midterm curriculum: would you say this force exerts upward pressure on internal costs, or downward pressure on client willingness-to-pay?</p>
+        `;
+      }
+
+      const msg = document.createElement('div');
+      msg.className = "flex items-start gap-3 max-w-2xl";
+      msg.innerHTML = `
+        <div class="w-8 h-8 rounded-lg bg-brand-light text-brand flex items-center justify-center flex-shrink-0 font-bold text-xs">
+          AI
+        </div>
+        <div class="bg-surface-page p-4 rounded-2xl rounded-tl-none border border-border-subtle text-xs text-ink-main leading-relaxed">
+          ${responseHtml}
+        </div>
+      `;
+      container.appendChild(msg);
+      container.scrollTop = container.scrollHeight;
+      lucide.createIcons();
+    }
+
+    function clearTutorChat() {
+      const container = document.getElementById('tutorChatContainer');
+      container.innerHTML = `
+        <div class="flex items-start gap-3 max-w-2xl">
+          <div class="w-8 h-8 rounded-lg bg-brand-light text-brand flex items-center justify-center flex-shrink-0 font-bold text-xs">
+            AI
+          </div>
+          <div class="bg-surface-page p-4 rounded-2xl rounded-tl-none border border-border-subtle text-xs text-ink-main leading-relaxed">
+            <p class="font-bold text-brand mb-1">Tutor reset. Ready for your next business topic!</p>
+            <p>Pick a subject above or ask a question about Porter's 5 Forces, WACC valuation, or Harvard Case 04.</p>
+          </div>
+        </div>
+      `;
+    }
+
+    // ==========================================
+    // QUIZ CONTROLLER (INTERACTIVE 5-Q ENGINE)
+    // ==========================================
+    function renderQuizQuestion() {
+      const q = quizData[currentQuizIndex];
+      document.getElementById('quizQuestionCounter').innerText = `Question ${currentQuizIndex + 1} of ${quizData.length}`;
+      document.getElementById('quizProgressBar').style.width = `${((currentQuizIndex + 1) / quizData.length) * 100}%`;
+      document.getElementById('quizQuestionText').innerText = q.q;
+
+      const container = document.getElementById('quizOptionsContainer');
+      container.innerHTML = '';
+
+      q.options.forEach((opt, idx) => {
+        const isSelected = quizSelectedAnswers[currentQuizIndex] === idx;
+        const optCard = document.createElement('div');
+        optCard.className = `p-4 rounded-2xl border cursor-pointer transition text-xs flex items-center gap-3 ${
+          isSelected 
+            ? 'border-brand bg-brand-light text-brand font-semibold shadow-sm' 
+            : 'border-border-subtle bg-surface-page hover:bg-white text-ink-main'
+        }`;
+        optCard.onclick = () => selectQuizAnswer(idx);
+        optCard.innerHTML = `
+          <div class="w-6 h-6 rounded-full border flex items-center justify-center text-xs font-bold ${
+            isSelected ? 'border-brand bg-brand text-white' : 'border-border-subtle bg-white text-ink-secondary'
+          }">
+            ${String.fromCharCode(65 + idx)}
+          </div>
+          <span>${opt}</span>
+        `;
+        container.appendChild(optCard);
+      });
+
+      document.getElementById('quizPrevBtn').disabled = currentQuizIndex === 0;
+      document.getElementById('quizNextBtn').innerText = currentQuizIndex === quizData.length - 1 ? "Submit Quiz & Grade" : "Next Question →";
+    }
+
+    function selectQuizAnswer(index) {
+      quizSelectedAnswers[currentQuizIndex] = index;
+      renderQuizQuestion();
+    }
+
+    function handleQuizNext() {
+      if (currentQuizIndex < quizData.length - 1) {
+        currentQuizIndex++;
+        renderQuizQuestion();
+      } else {
+        // Complete quiz -> Navigate to Results Screen
+        switchScreen('quiz-results');
+      }
+    }
+
+    function handleQuizPrev() {
+      if (currentQuizIndex > 0) {
+        currentQuizIndex--;
+        renderQuizQuestion();
+      }
+    }
+
+    function restartQuiz() {
+      currentQuizIndex = 0;
+      quizSelectedAnswers = {};
+      switchScreen('quiz');
+    }
+
+    // ==========================================
+    // 3D FLASHCARD CONTROLLER
+    // ==========================================
+    function renderFlashcard() {
+      const card = flashcardsData[currentCardIndex];
+      document.getElementById('cardFrontTerm').innerText = card.term;
+      document.getElementById('cardBackDefinition').innerText = card.definition;
+      document.getElementById('flashcardDeckCounter').innerText = `Card ${currentCardIndex + 1} of ${flashcardsData.length}`;
+      
+      const el = document.getElementById('flashcardElement');
+      el.classList.remove('rotate-y-180');
+      cardFlipped = false;
+    }
+
+    function toggleCardFlip() {
+      const el = document.getElementById('flashcardElement');
+      cardFlipped = !cardFlipped;
+      if (cardFlipped) {
+        el.classList.add('rotate-y-180');
+      } else {
+        el.classList.remove('rotate-y-180');
+      }
+    }
+
+    function nextFlashcard() {
+      currentCardIndex = (currentCardIndex + 1) % flashcardsData.length;
+      renderFlashcard();
+    }
+
+    function markCardKnown() {
+      alertNotification("Marked as Mastered! Moving to next card.");
+      nextFlashcard();
+    }
+
+    function markCardNeedsRevision() {
+      alertNotification("Marked for Review in tomorrow's spaced repetition queue.");
+      nextFlashcard();
+    }
+
+    // ==========================================
+    // LANGUAGE TUTOR CONTROLLER (10 REGIONAL)
+    // ==========================================
+    function renderLanguageGrid() {
+      const container = document.getElementById('languageGridContainer');
+      container.innerHTML = '';
+
+      indicLanguages.forEach(lang => {
+        const isSelected = activeLanguage === lang.id;
+        const card = document.createElement('div');
+        card.className = `p-3 rounded-2xl border cursor-pointer transition text-left ${
+          isSelected 
+            ? 'border-brand bg-brand-light text-brand shadow-card-sm' 
+            : 'border-border-subtle bg-white hover:bg-surface-page text-ink-main'
+        }`;
+        card.onclick = () => selectLanguage(lang);
+        card.innerHTML = `
+          <div class="flex items-center justify-between">
+            <span class="text-xs font-bold">${lang.name}</span>
+            <span class="text-[9px] px-1.5 py-0.5 rounded ${isSelected ? 'bg-brand text-white' : 'bg-surface-page text-ink-secondary'} font-semibold">${lang.level}</span>
+          </div>
+          <p class="text-sm font-bold mt-1 ${isSelected ? 'text-brand' : 'text-ink-secondary'}">${lang.script}</p>
+        `;
+        container.appendChild(card);
+      });
+    }
+
+    function selectLanguage(lang) {
+      activeLanguage = lang.id;
+      document.getElementById('activeLangTitle').innerText = `${lang.name} (${lang.script}) — Business Administration Vocabulary`;
+      document.getElementById('activeLangLevel').innerText = `${lang.level} Level`;
+      renderLanguageGrid();
+      alertNotification(`Active language switched to ${lang.name}`);
+    }
+
+    // ==========================================
+    // STUDY GOALS & CHECKLIST INTERACTION
+    // ==========================================
+    function updateGoalProgress() {
+      const checkboxes = document.querySelectorAll('.goal-checkbox');
+      const total = checkboxes.length;
+      let completed = 0;
+
+      checkboxes.forEach(cb => {
+        const labelText = cb.nextElementSibling;
+        if (cb.checked) {
+          completed++;
+          labelText.classList.add('line-through', 'text-ink-secondary');
+        } else {
+          labelText.classList.remove('line-through', 'text-ink-secondary');
+        }
+      });
+
+      const pct = Math.round((completed / total) * 100);
+      document.getElementById('goalCompletionBadge').innerText = `${completed} of ${total} Done (${pct}%)`;
+    }
+
+    function addNewGoal() {
+      const input = document.getElementById('newGoalInput');
+      const text = input.value.trim();
+      if (!text) return;
+
+      const list = document.getElementById('studyGoalsList');
+      const item = document.createElement('label');
+      item.className = "flex items-center gap-3 p-3 rounded-xl bg-white border border-border-subtle cursor-pointer hover:bg-surface-page transition";
+      item.innerHTML = `
+        <input type="checkbox" onchange="updateGoalProgress()" class="goal-checkbox w-4 h-4 text-brand rounded border-border-subtle focus:ring-brand accent-brand cursor-pointer">
+        <span class="text-xs text-ink-main font-medium">${escapeHtml(text)}</span>
+        <span class="ml-auto text-[10px] font-bold px-2 py-0.5 rounded bg-brand-light text-brand">15m</span>
+      `;
+      list.appendChild(item);
+      input.value = '';
+      updateGoalProgress();
+      alertNotification("New study goal added!");
+    }
+
+    // ==========================================
+    // MIND MAP INTERACTION
+    // ==========================================
+    function showMindMapDetail(title, desc) {
+      const drawer = document.getElementById('mindMapDetailDrawer');
+      document.getElementById('mindMapDetailTitle').innerText = title;
+      document.getElementById('mindMapDetailDesc').innerText = desc;
+      drawer.classList.remove('hidden');
+    }
+
+    // ==========================================
+    // PDF UPLOAD DEMO (NO CONTENT EXTRACTION)
+    // ==========================================
+    function handleFileUpload(event) {
+      const file = event.target.files[0];
+      if (!file) return;
+
+      alertNotification(`Demo upload only: ${file.name}. PDF text extraction and AI analysis are not connected yet.`);
+      const list = document.getElementById('documentListContainer');
+      const item = document.createElement('div');
+      item.className = "p-3 rounded-2xl bg-brand-light/60 border border-brand/20 flex items-center justify-between cursor-pointer";
+      item.innerHTML = `
+        <div class="flex items-center gap-2.5 overflow-hidden">
+          <div class="w-8 h-8 rounded-lg bg-brand text-white flex items-center justify-center flex-shrink-0">
+            <i data-lucide="file-text" class="w-4 h-4"></i>
+          </div>
+          <div class="truncate">
+            <p class="text-xs font-bold text-ink-main truncate">${escapeHtml(file.name)}</p>
+            <p class="text-[10px] text-ink-secondary">Uploaded • Demo only; not analyzed</p>
+          </div>
+        </div>
+        <span class="w-2 h-2 rounded-full bg-mint"></span>
+      `;
+      list.prepend(item);
+      lucide.createIcons();
+    }
+
+    function simulateConceptGeneration() {
+      alertNotification("Demo interaction only: live Gemini concept generation is not connected yet.");
+      document.getElementById('conceptOutputCard').classList.add('ring-2', 'ring-brand');
+      setTimeout(() => {
+        document.getElementById('conceptOutputCard').classList.remove('ring-2', 'ring-brand');
+      }, 1000);
+    }
+
+    // Toast Notification Utility
+    function alertNotification(msg) {
+      const toast = document.getElementById('toastNotification');
+      const text = document.getElementById('toastMessage');
+      text.innerText = msg;
+      toast.classList.remove('hidden');
+      setTimeout(() => {
+        toast.classList.add('hidden');
+      }, 3200);
+    }
+
+    // Helper: Escape HTML
+    function escapeHtml(str) {
+      return str.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
+    }
+
+    // ==========================================
+    // INITIALIZATION & EVENT LISTENERS
+    // ==========================================
+    window.addEventListener('DOMContentLoaded', () => {
+      // Initialize Lucide icons
+      lucide.createIcons();
+
+      // Notification Popover Toggle
+      const notifBtn = document.getElementById('notifBtn');
+      const notifDropdown = document.getElementById('notifDropdown');
+      notifBtn.addEventListener('click', (e) => {
+        e.stopPropagation();
+        notifDropdown.classList.toggle('hidden');
+      });
+      document.addEventListener('click', () => {
+        if (!notifDropdown.classList.contains('hidden')) {
+          notifDropdown.classList.add('hidden');
+        }
+      });
+
+      // Mobile Drawer Toggle
+      const mobileMenuBtn = document.getElementById('mobileMenuBtn');
+      const closeMobileDrawer = document.getElementById('closeMobileDrawer');
+      const mobileDrawer = document.getElementById('mobileDrawer');
+
+      mobileMenuBtn.addEventListener('click', () => {
+        mobileDrawer.classList.remove('hidden');
+      });
+      closeMobileDrawer.addEventListener('click', () => {
+        mobileDrawer.classList.add('hidden');
+      });
+
+      // Populate Mobile Nav
+      const mobileNavContainer = document.getElementById('mobileNavContainer');
+      const navLinks = [
+        { id: 'dashboard', label: 'Dashboard', icon: 'layout-dashboard' },
+        { id: 'ai-tutor', label: 'AI Tutor (Gemini)', icon: 'bot' },
+        { id: 'concept-explainer', label: 'Explain a Concept', icon: 'lightbulb' },
+        { id: 'pdf-reader', label: 'PDF Reader & Upload', icon: 'file-text' },
+        { id: 'summary-notes', label: 'Summary Notes', icon: 'book-open' },
+        { id: 'quiz', label: 'Practice Quiz', icon: 'check-circle-2' },
+        { id: 'flashcards', label: 'Flashcards (3D)', icon: 'layers' },
+        { id: 'mind-maps', label: 'Mind Maps', icon: 'network' },
+        { id: 'language-tutor', label: 'Language Tutor (10 Indic)', icon: 'languages' },
+        { id: 'planner', label: 'Study Planner', icon: 'calendar' },
+        { id: 'exam-simulator', label: 'Exam Simulator', icon: 'timer' },
+        { id: 'progress', label: 'Progress & Badges', icon: 'award' },
+        { id: 'landing', label: 'Public Landing Page', icon: 'globe' },
+      ];
+
+      navLinks.forEach(link => {
+        const btn = document.createElement('button');
+        btn.className = "w-full flex items-center gap-3 px-3 py-2.5 rounded-xl text-ink-secondary hover:text-brand hover:bg-brand-light transition text-left";
+        btn.onclick = () => switchScreen(link.id);
+        btn.innerHTML = `<i data-lucide="${link.icon}" class="w-4 h-4"></i><span>${link.label}</span>`;
+        mobileNavContainer.appendChild(btn);
+      });
+
+      // Render default components
+      renderLanguageGrid();
+      renderFlashcard();
+      renderQuizQuestion();
+      lucide.createIcons();
+    });
+  </script>
+</body>
+</html>
